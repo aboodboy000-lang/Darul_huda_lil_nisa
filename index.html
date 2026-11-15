@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
@@ -8,79 +9,53 @@
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#f8f5e9;
- color:#34452f;
+ margin:0;font-family:Arial,sans-serif;
+ background:#f8f5e9;color:#34452f;
 }
 header{
- background:#596b45;
- color:white;
- padding:22px 15px;
- text-align:center;
+ background:#596b45;color:white;padding:22px 15px;text-align:center;
 }
 header h1{margin:0;font-size:27px}
 header p{margin:9px 0 0}
-nav{
- background:#e9e4d3;
- padding:13px;
- text-align:center;
-}
-nav a{
- color:#405337;
- text-decoration:none;
- margin:8px;
- font-weight:bold;
-}
-.hero{
- text-align:center;
- padding:65px 20px;
- background:#eeeadb;
-}
+nav{background:#e9e4d3;padding:13px;text-align:center}
+nav a{color:#405337;text-decoration:none;margin:8px;font-weight:bold}
+.hero{text-align:center;padding:45px 20px;background:#eeeadb}
 .hero h2{font-size:29px;color:#596b45}
 .hero p{font-size:17px;line-height:1.9}
-.btn{
- display:inline-block;
- background:#596b45;
- color:white;
- padding:12px 25px;
- border-radius:7px;
- text-decoration:none;
- margin-top:15px;
+.btn,button{
+ display:inline-block;background:#596b45;color:white;
+ padding:12px 22px;border:0;border-radius:7px;
+ text-decoration:none;margin:7px;cursor:pointer;font-size:15px;
 }
-section{
- padding:35px 18px;
- text-align:center;
-}
+section{padding:30px 18px;text-align:center}
 h2{color:#596b45}
-.cards{
- display:flex;
- flex-wrap:wrap;
- justify-content:center;
- gap:15px;
-}
+.cards{display:flex;flex-wrap:wrap;justify-content:center;gap:15px}
 .card{
- background:white;
- border:1px solid #e2ddca;
- border-radius:12px;
- padding:22px;
- width:260px;
- box-shadow:0 3px 10px #00000010;
+ background:white;border:1px solid #e2ddca;border-radius:12px;
+ padding:22px;width:260px;box-shadow:0 3px 10px #00000010;
 }
 .card h3{color:#596b45}
-footer{
- background:#596b45;
- color:white;
- text-align:center;
- padding:22px;
- line-height:1.8;
+.panel{
+ background:white;max-width:440px;margin:25px auto;padding:25px;
+ border:1px solid #e2ddca;border-radius:12px;text-align:center;
 }
+input{
+ display:block;width:100%;padding:13px;margin:12px 0;
+ border:1px solid #c9c5b5;border-radius:7px;font-size:16px;
+}
+.hidden{display:none!important}
+.message{padding:12px;margin:12px 0;border-radius:7px;line-height:1.6}
+footer{
+ background:#596b45;color:white;text-align:center;padding:22px;line-height:1.8;
+}
+.small{font-size:14px;color:#596b45}
+button:disabled{opacity:.6;cursor:not-allowed}
 </style>
 </head>
 <body>
 
 <header>
-<h1>دار الهدى للنساء</h1>
+<h1>دار الہدیٰ للنساء</h1>
 <p>Darul Huda lil Nisaa</p>
 <p>Online Islamic Learning Platform</p>
 </header>
@@ -89,42 +64,73 @@ footer{
 <a href="#home">Home</a>
 <a href="#about">About</a>
 <a href="#courses">Courses</a>
-<a href="#contact">Contact</a>
+<a href="#account">Login</a>
 </nav>
 
 <div class="hero" id="home">
 <h2>Welcome to Darul Huda lil Nisaa</h2>
-<p>
-علمِ دین حاصل کیجیے اور قرآن و سنت کی روشنی میں
-اپنی زندگی کو سنواریے۔
-</p>
+<p>علمِ دین حاصل کیجیے اور قرآن و سنت کی روشنی میں اپنی زندگی کو سنواریے۔</p>
 <p>Learn Islam with authentic knowledge from Quran and Sunnah.</p>
-<a class="btn" href="#courses">Explore Courses</a>
+<a class="btn" href="#account">Student Login / Registration</a>
 </div>
 
 <section id="about">
 <h2>ہمارے بارے میں | About Us</h2>
-<p>
-دار الہدیٰ للنساء خواتین کے لیے ایک آن لائن اسلامی تعلیمی پلیٹ فارم ہے۔
-ہمارا مقصد قرآن و سنت کی روشنی میں صحیح دینی تعلیم فراہم کرنا ہے۔
-</p>
+<p>دار الہدیٰ للنساء خواتین کے لیے ایک آن لائن اسلامی تعلیمی پلیٹ فارم ہے۔ ہمارا مقصد قرآن و سنت کی روشنی میں صحیح دینی تعلیم فراہم کرنا ہے۔</p>
 </section>
 
 <section id="courses">
 <h2>ہمارے کورسز | Our Courses</h2>
 <div class="cards">
-<div class="card">
-<h3>علم العقیدہ</h3>
-<p>Learn the fundamentals of Islamic Aqeedah.</p>
+<div class="card"><h3>علم العقیدہ</h3><p>Learn the fundamentals of Islamic Aqeedah.</p></div>
+<div class="card"><h3>فقہ اسلامی</h3><p>Learn Islamic rulings in the light of Quran and Sunnah.</p></div>
+<div class="card"><h3>تفسیر القرآن</h3><p>Understand the meanings of the Holy Quran.</p></div>
 </div>
-<div class="card">
-<h3>فقہ اسلامی</h3>
-<p>Learn Islamic rulings in the light of Quran and Sunnah.</p>
+</section>
+
+<section id="account">
+<h2>Student Account</h2>
+
+<div class="panel" id="authPanel">
+<div id="registerBox">
+<h3>Student Registration</h3>
+<form id="registerForm">
+<input id="regName" type="text" placeholder="Full Name" required>
+<input id="regEmail" type="email" placeholder="Email Address" required>
+<input id="regPassword" type="password" placeholder="Password (minimum 6 characters)" minlength="6" required>
+<button type="submit" id="registerButton">Create Account</button>
+</form>
+<p class="small">Already registered?</p>
+<button type="button" id="showLogin">Go to Login</button>
 </div>
-<div class="card">
-<h3>تفسیر القرآن</h3>
-<p>Understand the meanings of the Holy Quran.</p>
+
+<div id="loginBox" class="hidden">
+<h3>Student Login</h3>
+<form id="loginForm">
+<input id="loginEmail" type="email" placeholder="Email Address" required>
+<input id="loginPassword" type="password" placeholder="Password" required>
+<button type="submit">Login</button>
+</form>
+<button type="button" id="showRegister">Create New Account</button>
+<button type="button" id="forgotPassword">Forgot Password?</button>
 </div>
+
+<div id="authMessage" class="message hidden"></div>
+</div>
+
+<div class="panel hidden" id="dashboard">
+<h2>Welcome to Your Dashboard</h2>
+<p id="studentName"></p>
+<p id="studentEmail"></p>
+<div id="roleMessage" class="message"></div>
+<div class="cards">
+<div class="card"><h3>My Courses</h3><p>Your published courses will appear here.</p></div>
+<div class="card"><h3>PDF Library</h3><p>Your course materials will appear here.</p></div>
+<div class="card"><h3>Attendance</h3><p>Your attendance details will appear here.</p></div>
+<div class="card"><h3>Weekly Quiz</h3><p>Your available quizzes will appear here.</p></div>
+<div class="card"><h3>My Results</h3><p>Your quiz results will appear here.</p></div>
+</div>
+<button type="button" id="logoutButton">Logout</button>
 </div>
 </section>
 
@@ -139,7 +145,170 @@ footer{
 <p>© 2026 All Rights Reserved</p>
 </footer>
 
+<script type="module">
+import { createClient } from
+'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = 'https://wcbeidolajiqxrwpjhze.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_6XuyNg8XOIEd2UmjLIG7Yw_4ohvWgNC';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const $ = (id) => document.getElementById(id);
+const message = $('authMessage');
+
+function showMessage(text, error=false) {
+  message.textContent = text;
+  message.style.background = error ? '#f8dddd' : '#e5efdf';
+  message.style.color = error ? '#8a2020' : '#34452f';
+  message.classList.remove('hidden');
+}
+
+function clearMessage() {
+  message.classList.add('hidden');
+  message.textContent = '';
+}
+
+$('showLogin').addEventListener('click', () => {
+  $('registerBox').classList.add('hidden');
+  $('loginBox').classList.remove('hidden');
+  clearMessage();
+});
+
+$('showRegister').addEventListener('click', () => {
+  $('loginBox').classList.add('hidden');
+  $('registerBox').classList.remove('hidden');
+  clearMessage();
+});
+
+$('registerForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  clearMessage();
+
+  const fullName = $('regName').value.trim();
+  const email = $('regEmail').value.trim();
+  const password = $('regPassword').value;
+
+  $('registerButton').disabled = true;
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { full_name: fullName }
+    }
+  });
+
+  $('registerButton').disabled = false;
+
+  if (error) {
+    showMessage(error.message, true);
+    return;
+  }
+
+  if (data.session) {
+    showMessage('Account created successfully. Opening your dashboard.');
+    await loadDashboard(data.session.user);
+  } else {
+    showMessage('Registration successful. Please check your email and confirm your account before logging in.');
+    $('registerForm').reset();
+  }
+});
+
+$('loginForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  clearMessage();
+
+  const email = $('loginEmail').value.trim();
+  const password = $('loginPassword').value;
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    showMessage(error.message, true);
+    return;
+  }
+
+  await loadDashboard(data.user);
+});
+
+$('forgotPassword').addEventListener('click', async () => {
+  const email = $('loginEmail').value.trim();
+
+  if (!email) {
+    showMessage('Please enter your email address first.', true);
+    return;
+  }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin
+  });
+
+  if (error) showMessage(error.message, true);
+  else showMessage('Password reset instructions have been sent if the account exists. Please check your email.');
+});
+
+async function loadDashboard(user) {
+  $('authPanel').classList.add('hidden');
+  $('dashboard').classList.remove('hidden');
+
+  $('studentEmail').textContent = user.email || '';
+
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('full_name, role')
+    .eq('id', user.id)
+    .single();
+
+  if (error) {
+    $('studentName').textContent = 'Welcome';
+    $('roleMessage').textContent =
+      'Your account is logged in, but the profile could not be loaded: ' + error.message;
+    return;
+  }
+
+  $('studentName').textContent = 'Assalamu Alaikum, ' + profile.full_name;
+
+  if (profile.role === 'admin') {
+    $('roleMessage').textContent =
+      'Admin account detected. Admin dashboard features will be connected next.';
+  } else {
+    $('roleMessage').textContent =
+      'Student account. Welcome to Darul Huda lil Nisaa.';
+  }
+}
+
+$('logoutButton').addEventListener('click', async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    alert(error.message);
+    return;
+  }
+  $('dashboard').classList.add('hidden');
+  $('authPanel').classList.remove('hidden');
+  $('loginBox').classList.remove('hidden');
+  $('registerBox').classList.add('hidden');
+  $('loginForm').reset();
+  clearMessage();
+  window.location.hash = 'account';
+});
+
+const { data: { session } } = await supabase.auth.getSession();
+
+if (session) {
+  await loadDashboard(session.user);
+}
+
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_OUT') {
+    $('dashboard').classList.add('hidden');
+    $('authPanel').classList.remove('hidden');
+  }
+});
+</script>
+
 </body>
 </html>
-sb_publishable_6XuyNg8XOIEd2UmjLIG7Yw_4ohvWgNC
-https://wcbeidolajiqxrwpjhze.supabase.co/rest/v1/
