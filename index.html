@@ -1,11 +1,10 @@
-
-
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Darul Huda lil Nisaa</title>
+
 <style>
 *{box-sizing:border-box}
 body{
@@ -36,7 +35,7 @@ h2{color:#596b45}
 }
 .card h3{color:#596b45}
 .panel{
- background:white;max-width:440px;margin:25px auto;padding:25px;
+ background:white;max-width:600px;margin:25px auto;padding:25px;
  border:1px solid #e2ddca;border-radius:12px;text-align:center;
 }
 input{
@@ -50,8 +49,10 @@ footer{
 }
 .small{font-size:14px;color:#596b45}
 button:disabled{opacity:.6;cursor:not-allowed}
+#pdfList .card{width:100%;max-width:400px;margin:12px auto}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -92,6 +93,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
 <h2>Student Account</h2>
 
 <div class="panel" id="authPanel">
+
 <div id="registerBox">
 <h3>Student Registration</h3>
 <form id="registerForm">
@@ -123,13 +125,30 @@ button:disabled{opacity:.6;cursor:not-allowed}
 <p id="studentName"></p>
 <p id="studentEmail"></p>
 <div id="roleMessage" class="message"></div>
+
 <div class="cards">
 <div class="card"><h3>My Courses</h3><p>Your published courses will appear here.</p></div>
-<div class="card"><h3>PDF Library</h3><p>Your course materials will appear here.</p></div>
+<div class="card"><h3>PDF Library</h3><p>Your course materials are below.</p></div>
 <div class="card"><h3>Attendance</h3><p>Your attendance details will appear here.</p></div>
 <div class="card"><h3>Weekly Quiz</h3><p>Your available quizzes will appear here.</p></div>
 <div class="card"><h3>My Results</h3><p>Your quiz results will appear here.</p></div>
 </div>
+
+<div class="panel" id="resourcePanel">
+<h2>📚 Course PDF Library</h2>
+
+<div id="adminUploadBox" class="hidden">
+<h3>Admin: Upload New PDF</h3>
+<input id="pdfTitle" type="text" placeholder="Book Name">
+<input id="pdfFile" type="file" accept="application/pdf">
+<button type="button" id="uploadPdfButton">Upload PDF</button>
+<p id="uploadMessage"></p>
+</div>
+
+<h3>Available Course Books</h3>
+<div id="pdfList">Loading books...</div>
+</div>
+
 <button type="button" id="logoutButton">Logout</button>
 </div>
 </section>
@@ -153,6 +172,7 @@ const SUPABASE_URL = 'https://wcbeidolajiqxrwpjhze.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_6XuyNg8XOIEd2UmjLIG7Yw_4ohvWgNC';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const BUCKET = 'Darul_huda_lil_nisa';
 
 const $ = (id) => document.getElementById(id);
 const message = $('authMessage');
@@ -194,9 +214,7 @@ $('registerForm').addEventListener('submit', async (event) => {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: {
-      data: { full_name: fullName }
-    }
+    options: { data: { full_name: fullName } }
   });
 
   $('registerButton').disabled = false;
@@ -207,10 +225,9 @@ $('registerForm').addEventListener('submit', async (event) => {
   }
 
   if (data.session) {
-    showMessage('Account created successfully. Opening your dashboard.');
     await loadDashboard(data.session.user);
   } else {
-    showMessage('Registration successful. Please check your email and confirm your account before logging in.');
+    showMessage('Registration successful. Please confirm your email before logging in.');
     $('registerForm').reset();
   }
 });
@@ -248,13 +265,141 @@ $('forgotPassword').addEventListener('click', async () => {
   });
 
   if (error) showMessage(error.message, true);
-  else showMessage('Password reset instructions have been sent if the account exists. Please check your email.');
+  else showMessage('Password reset instructions have been sent if the account exists.');
+});
+
+async function loadResources(role) {
+  $('adminUploadBox').classList.toggle('hidden', role !== 'admin');
+
+  const list = $('pdfList');
+  list.textContent = 'Loading books...';
+
+  const { data, error } = await supabase
+    .from('course_resources')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    list.textContent = error.message;
+    return;
+  }
+
+  list.replaceChildren();
+
+  if (!data || data.length === 0) {
+    list.textContent = 'No books uploaded yet.';
+    return;
+  }
+
+  for (const book of data) {
+    const item = document.createElement('div');
+    item.className = 'card';
+
+    const title = document.createElement('h3');
+    title.textContent = book.title;
+
+    const open = document.createElement('button');
+    open.textContent = 'Open PDF';
+
+    open.onclick = async () => {
+      const { data: link, error } = await supabase
+        .storage.from(BUCKET)
+        .createSignedUrl(book.file_path, 3600);
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      window.location.href = link.signedUrl;
+    };
+
+    item.append(title, open);
+
+    if (role === 'admin') {
+      const remove = document.createElement('button');
+      remove.textContent = 'Delete PDF';
+
+      remove.onclick = async () => {
+        if (!confirm('Delete this PDF?')) return;
+
+        const { error } = await supabase
+          .storage.from(BUCKET)
+          .remove([book.file_path]);
+
+        if (error) {
+          alert(error.message);
+          return;
+        }
+
+        const { error: dbError } = await supabase
+          .from('course_resources')
+          .delete()
+          .eq('id', book.id);
+
+        if (dbError) {
+          alert(dbError.message);
+          return;
+        }
+
+        await loadResources(role);
+      };
+
+      item.append(remove);
+    }
+
+    list.append(item);
+  }
+}
+
+$('uploadPdfButton').addEventListener('click', async () => {
+  const title = $('pdfTitle').value.trim();
+  const file = $('pdfFile').files[0];
+  const status = $('uploadMessage');
+
+  if (!title || !file) {
+    status.textContent = 'Enter book name and select PDF.';
+    return;
+  }
+
+  if (file.type !== 'application/pdf') {
+    status.textContent = 'Please select a PDF file.';
+    return;
+  }
+
+  status.textContent = 'Uploading...';
+
+  const path = crypto.randomUUID() + '.pdf';
+
+  const { error } = await supabase
+    .storage.from(BUCKET)
+    .upload(path, file, { contentType: 'application/pdf' });
+
+  if (error) {
+    status.textContent = error.message;
+    return;
+  }
+
+  const { error: saveError } = await supabase
+    .from('course_resources')
+    .insert({ title, file_path: path });
+
+  if (saveError) {
+    await supabase.storage.from(BUCKET).remove([path]);
+    status.textContent = saveError.message;
+    return;
+  }
+
+  status.textContent = 'PDF uploaded successfully!';
+  $('pdfTitle').value = '';
+  $('pdfFile').value = '';
+
+  await loadResources('admin');
 });
 
 async function loadDashboard(user) {
   $('authPanel').classList.add('hidden');
   $('dashboard').classList.remove('hidden');
-
   $('studentEmail').textContent = user.email || '';
 
   const { data: profile, error } = await supabase
@@ -266,27 +411,32 @@ async function loadDashboard(user) {
   if (error) {
     $('studentName').textContent = 'Welcome';
     $('roleMessage').textContent =
-      'Your account is logged in, but the profile could not be loaded: ' + error.message;
+      'Profile could not be loaded: ' + error.message;
+    $('adminUploadBox').classList.add('hidden');
     return;
   }
 
-  $('studentName').textContent = 'Assalamu Alaikum, ' + profile.full_name;
+  $('studentName').textContent =
+    'Assalamu Alaikum, ' + (profile.full_name || 'Student');
 
   if (profile.role === 'admin') {
-    $('roleMessage').textContent =
-      'Admin account detected. Admin dashboard features will be connected next.';
+    $('roleMessage').textContent = 'Admin account detected.';
   } else {
     $('roleMessage').textContent =
       'Student account. Welcome to Darul Huda lil Nisaa.';
   }
+
+  await loadResources(profile.role);
 }
 
 $('logoutButton').addEventListener('click', async () => {
   const { error } = await supabase.auth.signOut();
+
   if (error) {
     alert(error.message);
     return;
   }
+
   $('dashboard').classList.add('hidden');
   $('authPanel').classList.remove('hidden');
   $('loginBox').classList.remove('hidden');
@@ -302,7 +452,7 @@ if (session) {
   await loadDashboard(session.user);
 }
 
-supabase.auth.onAuthStateChange((event, session) => {
+supabase.auth.onAuthStateChange((event) => {
   if (event === 'SIGNED_OUT') {
     $('dashboard').classList.add('hidden');
     $('authPanel').classList.remove('hidden');
