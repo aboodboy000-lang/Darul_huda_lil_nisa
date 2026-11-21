@@ -354,7 +354,7 @@ async function loadClasses(){
  if(!data?.length){box.textContent="Abhi class schedule add nahi hua.";return;}
  data.forEach(c=>{
   const div=document.createElement("div");div.className="item";
-  const h=document.createElement("h3");h.textContent=c.title||"Class";
+  const h=document.createElement("h3");h.textContent=c.class_title||"Class";
   const p=document.createElement("p");
   p.textContent=[c.subject,c.class_date,c.class_time,c.teacher].filter(Boolean).join(" | ");
   div.append(h,p);
@@ -369,14 +369,14 @@ async function loadClasses(){
 }
 async function addClass(){
  const record={
-  title:document.getElementById("classTitle").value.trim(),
+  class_title:document.getElementById("classTitle").value.trim(),
   subject:document.getElementById("classSubject").value.trim(),
   class_date:document.getElementById("classDate").value,
   class_time:document.getElementById("classTime").value||null,
   teacher:document.getElementById("teacherName").value.trim(),
   class_link:document.getElementById("classLink").value.trim()||null
  };
- if(!record.title||!record.class_date)return message("Class title aur date zaroor likhiye.");
+ if(!record.class_title||!record.class_date)return message("Class title aur date zaroor likhiye.");
  const {error}=await db.from("class_sections").insert(record);
  if(error)return message("Class save error: "+error.message);
  message("Class schedule save ho gaya.");
