@@ -356,7 +356,7 @@ async function loadClasses(){
   const div=document.createElement("div");div.className="item";
   const h=document.createElement("h3");h.textContent=c.class_title||"Class";
   const p=document.createElement("p");
-  p.textContent=[c.subject,c.class_date,c.class_time,c.teacher].filter(Boolean).join(" | ");
+  p.textContent=[c.subject,c.class_date,c.start_time,c.teacher].filter(Boolean).join(" | ");
   div.append(h,p);
   if(c.class_link){
    const a=document.createElement("a");
@@ -372,7 +372,7 @@ async function addClass(){
   class_title:document.getElementById("classTitle").value.trim(),
   subject:document.getElementById("classSubject").value.trim(),
   class_date:document.getElementById("classDate").value,
-  class_time:document.getElementById("classTime").value||null,
+  start_time:document.getElementById("classTime").value||null,
   teacher:document.getElementById("teacherName").value.trim(),
   class_link:document.getElementById("classLink").value.trim()||null
  };
