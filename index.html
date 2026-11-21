@@ -1,520 +1,502 @@
 
-
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Darul Huda lil Nisaa</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--navy:#14243b;--navy2:#203957;--gold:#c9a64b;--cream:#f7f4eb;--ink:#243247;--muted:#64748b;--line:#e5e0d3}
+:root{--navy:#14243b;--gold:#c49a43;--cream:#f8f5ed;--white:#fff;--red:#a83232;--green:#28734c}
 *{box-sizing:border-box}
-body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,sans-serif;line-height:1.6}
-header{background:linear-gradient(120deg,var(--navy),var(--navy2));color:#fff;text-align:center;padding:24px 14px;border-bottom:4px solid var(--gold)}
-header h1{margin:0;font-size:27px}
-nav{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;background:#ebe6d8;padding:12px}
-nav a{color:var(--navy);font-weight:bold;text-decoration:none}
-.hero{text-align:center;padding:35px 16px;background:#f0ecdf}
-section{padding:22px 14px;max-width:1050px;margin:auto}
-h2,h3{color:var(--navy)}
-.panel,.card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:18px;margin:14px auto;box-shadow:0 3px 12px #14243b0c}
-.panel{max-width:850px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-input,select,textarea{display:block;width:100%;padding:12px;margin:8px 0;border:1px solid #cbd2dc;border-radius:8px;font-size:15px;background:white;color:var(--ink)}
-textarea{min-height:90px}
-button,.btn{border:0;border-radius:8px;background:var(--navy);color:white;padding:11px 16px;margin:5px;cursor:pointer;font-size:14px;text-decoration:none;display:inline-block}
-button.secondary{background:#e9e4d7;color:var(--navy)}
-button.danger{background:#9b2c2c}
-button:disabled{opacity:.55}
+body{margin:0;background:var(--cream);color:var(--navy);font-family:Arial,sans-serif}
+header{background:var(--navy);color:white;padding:20px;text-align:center;border-bottom:4px solid var(--gold)}
+header h1{margin:0;font-size:23px}
+header p{margin:7px 0 0;color:#ead6a5}
+main{max-width:950px;margin:20px auto;padding:12px}
+.card{background:white;border:1px solid #e6dfd0;border-radius:13px;padding:18px;margin:14px 0;box-shadow:0 3px 12px #0000000c}
+h2{font-size:19px;margin-top:0;color:var(--navy)}
+h3{font-size:16px}
+input,select,textarea{width:100%;padding:12px;margin:7px 0 12px;border:1px solid #cfc8ba;border-radius:8px;font-size:15px;background:white}
+textarea{min-height:75px}
+button{border:0;border-radius:8px;padding:11px 15px;background:var(--navy);color:white;font-size:14px;cursor:pointer;margin:4px}
+button.gold{background:var(--gold);color:#182238}
+button.red{background:var(--red)}
+button.green{background:var(--green)}
+button.light{background:#eee8db;color:var(--navy)}
 .hidden{display:none!important}
-.muted{color:var(--muted);font-size:13px}
-.msg{padding:11px;border-radius:8px;margin:10px 0;background:#e9eff8}
-.msg.ok{background:#e6f4e9}
-.msg.err{background:#fdeaea;color:#8b1f1f}
-.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.row>*{flex:1}
-.passwrap{display:flex;gap:5px;align-items:center}
-.passwrap input{flex:1}
-.passwrap button{flex:0 0 auto}
-.item{border:1px solid var(--line);border-radius:10px;padding:13px;margin:10px 0;background:#fff}
-.option{display:flex;gap:8px;align-items:center;margin:6px 0}
-.option input{width:auto;margin:0}
-hr{border:0;border-top:1px solid var(--line);margin:18px 0}
-footer{text-align:center;background:var(--navy);color:#fff;padding:20px;border-top:4px solid var(--gold)}
-.badge{display:inline-block;background:#f3ead0;color:#57451a;border-radius:20px;padding:3px 9px;font-size:12px}
-@media(max-width:600px){header h1{font-size:22px}.panel{padding:13px}}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+.tabs button{flex:1;min-width:100px}
+.notice{padding:10px;border-radius:8px;background:#f4eddb;margin:10px 0;white-space:pre-wrap}
+.item{padding:12px;border:1px solid #e6dfd0;border-radius:9px;margin:9px 0;background:#fff}
+.small{font-size:13px;color:#625f58}
+.password-wrap{display:flex;gap:5px;align-items:center}
+.password-wrap input{flex:1}
+.password-wrap button{margin:0;height:42px;min-width:48px;background:#eee8db;color:#14243b}
+label{font-size:14px;font-weight:bold}
+hr{border:0;border-top:1px solid #e7e0d2;margin:16px 0}
+a{color:#9a6d16;overflow-wrap:anywhere}
+@media(max-width:550px){main{padding:8px}.card{padding:13px}header h1{font-size:20px}}
 </style>
 </head>
 <body>
 <header>
-<h1>دار الہدیٰ للنساء</h1>
-<p>Darul Huda lil Nisaa</p>
-<p>Online Islamic Learning Platform</p>
+<h1>دار الهدى للنساء</h1>
+<p>DARUL HUDA LIL NISAA</p>
 </header>
-<nav>
-<a href="#home">Home</a>
-<a href="#about">About</a>
-<a href="#courses">Courses</a>
-<a href="#account">Login</a>
-</nav>
-<div class="hero" id="home">
-<h2>Welcome to Darul Huda lil Nisaa</h2>
-<p>علمِ دین حاصل کیجیے اور قرآن و سنت کی روشنی میں اپنی زندگی کو سنواریے۔</p>
-<p>Learn Islam with authentic knowledge from Quran and Sunnah.</p>
-<a class="btn" href="#account">Student Login / Registration</a>
+
+<main>
+<div id="message" class="notice hidden"></div>
+
+<section id="authArea">
+<div class="card">
+<h2>Student / Admin Login</h2>
+<label>Email</label>
+<input id="loginEmail" type="email" placeholder="Enter email">
+<label>Password</label>
+<div class="password-wrap">
+<input id="loginPassword" type="password" placeholder="Enter password">
+<button type="button" onclick="togglePassword('loginPassword',this)">👁</button>
 </div>
-<section id="about">
-<h2>ہمارے بارے میں | About Us</h2>
-<p>دار الہدیٰ للنساء خواتین کے لیے ایک آن لائن اسلامی تعلیمی پلیٹ فارم ہے۔ ہمارا مقصد قرآن و سنت کی روشنی میں صحیح دینی تعلیم فراہم کرنا ہے۔</p>
-</section>
-<section id="courses">
-<h2>ہمارے کورسز | Our Courses</h2>
-<div class="cards">
-<div class="card"><h3>علم العقیدہ</h3><p>Learn the fundamentals of Islamic Aqeedah.</p></div>
-<div class="card"><h3>فقہ اسلامی</h3><p>Learn Islamic rulings in the light of Quran and Sunnah.</p></div>
-<div class="card"><h3>تفسیر القرآن</h3><p>Understand the meanings of the Holy Quran.</p></div>
-</div>
-</section>
-<section id="account">
-<h2>Student Account</h2>
-<div class="panel" id="authPanel">
-<div id="registerBox">
-<h3>Student Registration</h3>
-<form id="registerForm">
-<input id="regName" placeholder="Full Name" required>
-<input id="regEmail" type="email" placeholder="Email Address" required>
-<div class="passwrap">
-<input id="regPassword" type="password" minlength="6" placeholder="Password (minimum 6 characters)" required>
-<button type="button" class="secondary togglePass" data-target="regPassword">👁</button>
-</div>
-<button id="registerButton" type="submit">Create Account</button>
-</form>
-<p class="muted">Already registered?</p>
-<button id="showLogin" type="button" class="secondary">Go to Login</button>
-</div>
-<div id="loginBox" class="hidden">
-<h3>Student Login</h3>
-<form id="loginForm">
-<input id="loginEmail" type="email" placeholder="Email Address" required>
-<div class="passwrap">
-<input id="loginPassword" type="password" placeholder="Password" required>
-<button type="button" class="secondary togglePass" data-target="loginPassword">👁</button>
-</div>
-<button type="submit">Login</button>
-</form>
-<button id="showRegister" type="button" class="secondary">Create New Account</button>
-<button id="forgotPassword" type="button" class="secondary">Forgot Password?</button>
-</div>
-<div id="authMessage" class="msg hidden"></div>
+<button class="gold" onclick="login()">Login</button>
 </div>
 
-<div class="panel hidden" id="dashboard">
-<div class="row">
-<div><h2>Darul Huda Dashboard</h2><p id="studentName"></p><p class="muted" id="studentEmail"></p></div>
-<div style="text-align:left"><button id="logoutButton" class="danger">Logout</button></div>
-</div>
-<div id="roleMessage" class="msg"></div>
-<div id="adminPanel" class="hidden">
-<h2>Admin Panel <span class="badge">ADMIN</span></h2>
-<div class="cards">
 <div class="card">
-<h3>Upload PDF</h3>
-<input id="pdfTitle" placeholder="Book / PDF title">
-<input id="pdfFile" type="file" accept="application/pdf">
-<button id="uploadPdfButton">Upload PDF</button>
-<p id="uploadMessage" class="muted"></p>
+<h2>Student Registration</h2>
+<label>Full Name</label>
+<input id="regName" placeholder="Full name">
+<label>Email</label>
+<input id="regEmail" type="email" placeholder="Email address">
+<label>Password</label>
+<div class="password-wrap">
+<input id="regPassword" type="password" placeholder="Create password">
+<button type="button" onclick="togglePassword('regPassword',this)">👁</button>
 </div>
+<button class="gold" onclick="register()">Register</button>
+<p class="small">Registration ke baad apne email par confirmation check karein, agar Supabase email confirmation on hai.</p>
+</div>
+</section>
+
+<section id="dashboard" class="hidden">
 <div class="card">
-<h3>Create Live Class</h3>
-<input id="classTitle" placeholder="Class title / subject">
-<input id="classDate" type="date">
-<input id="classTime" type="time">
-<input id="teacherName" placeholder="Teacher name">
-<input id="meetingLink" type="url" placeholder="Zoom / meeting link">
-<button id="createClassButton">Publish Class</button>
-<p id="classMessage" class="muted"></p>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+<div><h2 id="welcome">Dashboard</h2><span id="userRole" class="small"></span></div>
+<button class="red" onclick="logout()">Logout</button>
 </div>
+</div>
+
+<div class="tabs">
+<button onclick="showTab('resources')">PDF Books</button>
+<button onclick="showTab('classes')">Live Classes</button>
+<button onclick="showTab('quizzes')">Quizzes</button>
+<button onclick="showTab('attendance')">Attendance</button>
+<button onclick="showTab('results')">Results</button>
+</div>
+
+<section id="resources" class="tab">
 <div class="card">
-<h3>Create Quiz</h3>
-<input id="quizSubject" placeholder="Quiz title / subject">
-<label>Available until</label>
-<input id="quizUntil" type="datetime-local">
-<button id="createQuizButton">Create & Publish Quiz</button>
-<p id="quizMessage" class="muted"></p>
+<h2>PDF Books</h2>
+<div id="pdfAdmin" class="hidden">
+<label>PDF Title</label><input id="pdfTitle" placeholder="Book title">
+<label>Select PDF</label><input id="pdfFile" type="file" accept="application/pdf">
+<button class="gold" onclick="uploadPDF()">Upload PDF</button>
 </div>
+<div id="pdfList">Loading...</div>
 </div>
+</section>
+
+<section id="classes" class="tab hidden">
 <div class="card">
-<h3>Add Questions to a Quiz</h3>
-<select id="adminQuizSelect"><option value="">Select quiz</option></select>
-<textarea id="questionText" placeholder="Write question"></textarea>
-<div class="row"><input id="optA" placeholder="Option A"><input id="optB" placeholder="Option B"></div>
-<div class="row"><input id="optC" placeholder="Option C"><input id="optD" placeholder="Option D"></div>
-<select id="correctOption">
-<option value="0">Correct answer: A</option>
-<option value="1">Correct answer: B</option>
-<option value="2">Correct answer: C</option>
-<option value="3">Correct answer: D</option>
+<h2>Live Classes</h2>
+<div id="classAdmin" class="hidden">
+<label>Class Name / Subject</label><input id="classType" placeholder="Aqeedah / Fiqh">
+<label>Class Date</label><input id="classDate" type="date">
+<label>Start Time</label><input id="classTime" type="time">
+<label>Teacher Name</label><input id="teacherName" placeholder="Teacher name">
+<label>Meeting Link</label><input id="meetingLink" placeholder="https://...">
+<button class="gold" onclick="publishClass()">Publish Class</button>
+</div>
+<div id="classList">Loading...</div>
+</div>
+</section>
+
+<section id="quizzes" class="tab hidden">
+<div class="card">
+<h2>Weekly Quizzes</h2>
+<div id="quizAdmin" class="hidden">
+<label>Quiz Subject</label><input id="quizSubject" placeholder="Aqeedah / Fiqh">
+<label>Available Until</label><input id="quizUntil" type="datetime-local">
+<button class="gold" onclick="createQuiz()">Create Quiz</button>
+<div id="questionForm" class="hidden">
+<hr><h3>Add Questions</h3>
+<label>Question</label><textarea id="questionText" placeholder="Write your question"></textarea>
+<label>Option A</label><input id="opt0" placeholder="Option A">
+<label>Option B</label><input id="opt1" placeholder="Option B">
+<label>Option C</label><input id="opt2" placeholder="Option C">
+<label>Option D</label><input id="opt3" placeholder="Option D">
+<label>Correct Answer</label>
+<select id="correctAnswer">
+<option value="0">A</option><option value="1">B</option>
+<option value="2">C</option><option value="3">D</option>
 </select>
-<button id="addQuestionButton">Add Question</button>
-<p id="questionMessage" class="muted"></p>
+<button class="green" onclick="addQuestion()">Save Question</button>
+<button class="gold" onclick="publishQuiz()">Finish & Publish Quiz</button>
+<p class="small" id="questionCount">Questions added: 0</p>
 </div>
+</div>
+<div id="quizList">Loading...</div>
+<div id="quizAttempt" class="hidden"></div>
+</div>
+</section>
+
+<section id="attendance" class="tab hidden">
 <div class="card">
-<h3>Manage Attendance</h3>
-<select id="attendanceClassSelect"><option value="">Select class</option></select>
-<input id="attendanceStudentId" placeholder="Student UUID (from profiles)">
-<select id="attendancePresent">
-<option value="true">Present</option>
-<option value="false">Absent</option>
-</select>
-<button id="markAttendanceButton">Save Attendance</button>
-<p id="attendanceMessage" class="muted"></p>
-<p class="muted">Student UUID is available in Supabase → Authentication → Users.</p>
+<h2>Attendance</h2>
+<div id="attendanceAdmin" class="hidden">
+<label>Select Class</label><select id="attendanceClass"></select>
+<label>Select Student</label><select id="attendanceStudent"></select>
+<label>Attendance</label>
+<select id="attendanceStatus"><option value="true">Present</option><option value="false">Absent</option></select>
+<button class="gold" onclick="markAttendance()">Save Attendance</button>
 </div>
-</div>
-<hr>
-<h2>📚 Course PDF Library</h2><div id="pdfList">Loading books...</div>
-<h2>📅 Live Classes</h2><div id="classList">Loading classes...</div>
-<h2>📝 Available Quizzes</h2><div id="quizList">Loading quizzes...</div>
-<h2>📊 My Attendance</h2><div id="myAttendance">Loading attendance...</div>
-<h2>🏅 My Results</h2><div id="myResults">Loading results...</div>
-<div id="quizArea" class="card hidden"></div>
+<div id="attendanceList">Loading...</div>
 </div>
 </section>
-<section id="contact">
-<h2>رابطہ | Contact</h2>
-<p>For course information, please contact the administration.</p>
+
+<section id="results" class="tab hidden">
+<div class="card">
+<h2>Quiz Results</h2>
+<div id="resultList">Loading...</div>
+</div>
 </section>
-<footer>
-<p>دار الہدیٰ للنساء</p>
-<p>Darul Huda lil Nisaa</p>
-<p>© 2026 All Rights Reserved</p>
-</footer>
+</section>
+</main>
 
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+<script>
+const SUPABASE_URL = "https://wcbeidolajiqxrwpjhze.supabase.co";
+const SUPABASE_KEY = "sb_publishable_6XuyNg8XOIEd2UmjLIG7Yw_4ohvWgNC";
+const BUCKET = "Darul_huda_lil_nisa";
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-const SUPABASE_URL = 'https://wcbeidolajiqxrwpjhze.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_6XuyNg8XOIEd2UmjLIG7Yw_4ohvWgNC';
-const BUCKET = 'Darul_huda_lil_nisa';
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-const $ = id => document.getElementById(id);
-let currentUser = null, currentProfile = null, activeQuiz = null, activeQuestions = [];
+let currentUser=null, currentProfile=null, activeQuiz=null, questionCount=0;
 
-function msg(id,text,error=false){
- const el=$(id);
- if(el){el.textContent=text;el.className='msg '+(error?'err':'ok');}
+function msg(text,isError=false){
+ const el=document.getElementById('message');
+ el.textContent=text;el.classList.remove('hidden');
+ el.style.background=isError?'#f8e3e3':'#f4eddb';
+ window.scrollTo({top:0,behavior:'smooth'});
 }
-function safeText(tag,text){
- const el=document.createElement(tag);
- el.textContent=text??'';
- return el;
+function clearMsg(){document.getElementById('message').classList.add('hidden')}
+function togglePassword(id,btn){
+ const el=document.getElementById(id);
+ el.type=el.type==='password'?'text':'password';
+ btn.textContent=el.type==='password'?'👁':'🙈';
 }
-function makeButton(text,fn,cls=''){
- const b=document.createElement('button');
- b.textContent=text;b.className=cls;b.addEventListener('click',fn);
- return b;
+function showTab(id){
+ document.querySelectorAll('.tab').forEach(x=>x.classList.add('hidden'));
+ document.getElementById(id).classList.remove('hidden');
+ if(id==='resources')loadPDFs();
+ if(id==='classes')loadClasses();
+ if(id==='quizzes')loadQuizzes();
+ if(id==='attendance')loadAttendance();
+ if(id==='results')loadResults();
 }
-function isAdmin(){
- return currentProfile?.role?.toLowerCase()==='admin';
+function admin(){return currentProfile?.role?.toLowerCase()==='admin'}
+
+async function register(){
+ clearMsg();
+ const full_name=document.getElementById('regName').value.trim();
+ const email=document.getElementById('regEmail').value.trim();
+ const password=document.getElementById('regPassword').value;
+ if(!full_name||!email||!password)return msg('Please fill all registration fields.',true);
+ if(password.length<6)return msg('Password kam az kam 6 characters ka hona chahiye.',true);
+ const {data,error}=await db.auth.signUp({email,password,options:{data:{full_name}}});
+ if(error)return msg(error.message,true);
+ if(data.session){await loadDashboard();}
+ else msg('Registration submitted. Email confirmation required ho sakti hai. Email confirm karke login karein.');
 }
 
-document.querySelectorAll('.togglePass').forEach(b=>b.addEventListener('click',()=>{
- const input=$(b.dataset.target);
- input.type=input.type==='password'?'text':'password';
- b.textContent=input.type==='password'?'👁':'🙈';
-}));
-
-$('showLogin').onclick=()=>{
- $('registerBox').classList.add('hidden');
- $('loginBox').classList.remove('hidden');
-};
-$('showRegister').onclick=()=>{
- $('loginBox').classList.add('hidden');
- $('registerBox').classList.remove('hidden');
-};
-
-$('registerForm').addEventListener('submit',async e=>{
- e.preventDefault();
- $('registerButton').disabled=true;
- const fullName=$('regName').value.trim();
- const email=$('regEmail').value.trim();
- const password=$('regPassword').value;
- const {data,error}=await supabase.auth.signUp({
-  email,password,options:{data:{full_name:fullName}}
- });
- $('registerButton').disabled=false;
- if(error){msg('authMessage',error.message,true);return;}
- if(data.session){await loadDashboard(data.session.user);}
- else{
-  msg('authMessage','Registration submitted. Confirm your email, then log in.');
-  $('registerForm').reset();
- }
-});
-
-$('loginForm').addEventListener('submit',async e=>{
- e.preventDefault();
- const {data,error}=await supabase.auth.signInWithPassword({
-  email:$('loginEmail').value.trim(),
-  password:$('loginPassword').value
- });
- if(error){msg('authMessage',error.message,true);return;}
- await loadDashboard(data.user);
-});
-
-$('forgotPassword').onclick=async()=>{
- const email=$('loginEmail').value.trim();
- if(!email){msg('authMessage','Please enter your email address first.',true);return;}
- const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:location.origin});
- if(error)msg('authMessage',error.message,true);
- else msg('authMessage','If the account exists, password reset instructions have been sent.');
-};
-
-$('logoutButton').onclick=async()=>{
- const {error}=await supabase.auth.signOut();
- if(error)alert(error.message);
- $('dashboard').classList.add('hidden');
- $('authPanel').classList.remove('hidden');
-};
-
-async function loadDashboard(user){
+async function login(){
+ clearMsg();
+ const email=document.getElementById('loginEmail').value.trim();
+ const password=document.getElementById('loginPassword').value;
+ const {data,error}=await db.auth.signInWithPassword({email,password});
+ if(error)return msg(error.message,true);
+ await loadDashboard();
+}
+async function logout(){
+ await db.auth.signOut();
+ currentUser=null;currentProfile=null;
+ document.getElementById('dashboard').classList.add('hidden');
+ document.getElementById('authArea').classList.remove('hidden');
+ msg('You have logged out.');
+}
+async function loadDashboard(){
+ const {data:{user},error}=await db.auth.getUser();
+ if(error||!user)return;
  currentUser=user;
- $('authPanel').classList.add('hidden');
- $('dashboard').classList.remove('hidden');
- $('studentEmail').textContent=user.email||'';
- const {data:profile,error}=await supabase.from('profiles').select('full_name,role').eq('id',user.id).single();
- if(error){msg('roleMessage','Profile could not be loaded: '+error.message,true);return;}
+ const {data:profile,error:profileError}=await db.from('profiles').select('full_name,role').eq('id',user.id).single();
+ if(profileError)return msg('Profile load error: '+profileError.message,true);
  currentProfile=profile;
- $('studentName').textContent='Assalamu Alaikum, '+(profile.full_name||'Student');
- msg('roleMessage',isAdmin()?'Admin account detected.':'Student account. Welcome to Darul Huda lil Nisaa.');
- $('adminPanel').classList.toggle('hidden',!isAdmin());
- await Promise.all([loadResources(),loadClasses(),loadQuizzes(),loadAttendance(),loadResults()]);
-}
-
-async function loadResources(){
- const box=$('pdfList');box.replaceChildren();
- const {data,error}=await supabase.from('course_resources').select('*').order('created_at',{ascending:false});
- if(error){box.textContent=error.message;return;}
- if(!data?.length){box.textContent='No books uploaded yet.';return;}
- data.forEach(book=>{
-  const item=document.createElement('div');item.className='item';
-  item.append(safeText('strong',book.title+' '));
-  item.append(makeButton('Open PDF',async()=>{
-   const {data:d,error:e}=await supabase.storage.from(BUCKET).createSignedUrl(book.file_path,3600);
-   if(e){alert(e.message);return;}
-   window.open(d.signedUrl,'_blank');
-  }));
-  if(isAdmin())item.append(makeButton('Delete PDF',async()=>{
-   if(!confirm('Delete this PDF?'))return;
-   const {error:e}=await supabase.storage.from(BUCKET).remove([book.file_path]);
-   if(e){alert(e.message);return;}
-   const {error:de}=await supabase.from('course_resources').delete().eq('id',book.id);
-   if(de){alert(de.message);return;}
-   loadResources();
-  },'danger'));
-  box.append(item);
+ document.getElementById('authArea').classList.add('hidden');
+ document.getElementById('dashboard').classList.remove('hidden');
+ document.getElementById('welcome').textContent='Welcome, '+(profile.full_name||user.email);
+ document.getElementById('userRole').textContent='Account: '+profile.role;
+ ['pdfAdmin','classAdmin','quizAdmin','attendanceAdmin'].forEach(id=>{
+ document.getElementById(id).classList.toggle('hidden',!admin());
  });
+ showTab('resources');
 }
+db.auth.onAuthStateChange((event,session)=>{
+ if(session && !currentUser)setTimeout(()=>loadDashboard(),200);
+});
+(async()=>{
+ const {data:{session}}=await db.auth.getSession();
+ if(session)await loadDashboard();
+})();
 
-$('uploadPdfButton').onclick=async()=>{
- const title=$('pdfTitle').value.trim(),file=$('pdfFile').files[0];
- if(!title||!file){msg('uploadMessage','Enter a title and choose a PDF.',true);return;}
- if(file.type!=='application/pdf'){msg('uploadMessage','Please choose a PDF file.',true);return;}
- msg('uploadMessage','Uploading...');
- const path=crypto.randomUUID()+'.pdf';
- const {error}=await supabase.storage.from(BUCKET).upload(path,file,{contentType:'application/pdf'});
- if(error){msg('uploadMessage',error.message,true);return;}
- const {error:dbError}=await supabase.from('course_resources').insert({title,file_path:path});
- if(dbError){
-  await supabase.storage.from(BUCKET).remove([path]);
-  msg('uploadMessage',dbError.message,true);return;
- }
- msg('uploadMessage','PDF uploaded successfully.');
- $('pdfTitle').value='';$('pdfFile').value='';
- loadResources();
-};
-
-async function loadClasses(){
- const box=$('classList');box.replaceChildren();
- const {data,error}=await supabase.from('class_sections').select('*').order('class_date',{ascending:true});
- if(error){box.textContent=error.message;return;}
- if(!data?.length){box.textContent='No classes published yet.';return;}
- const sel=$('attendanceClassSelect');
- if(sel)sel.innerHTML='<option value="">Select class</option>';
- data.forEach(c=>{
-  const item=document.createElement('div');item.className='item';
-  item.append(safeText('strong',c.class_type||'Class'));
-  item.append(safeText('p',`${c.class_date||''} ${c.start_time||''} | ${c.teacher_name||''}`));
-  if(c.meeting_link){
-   const a=document.createElement('a');
-   a.href=c.meeting_link;a.target='_blank';a.rel='noopener';
-   a.textContent='Join Class';a.className='btn';item.append(a);
-  }
-  if(isAdmin()&&sel){
-   const op=document.createElement('option');
-   op.value=c.id;op.textContent=`${c.class_type} - ${c.class_date}`;
-   sel.append(op);
-  }
-  box.append(item);
- });
+async function uploadPDF(){
+ const title=document.getElementById('pdfTitle').value.trim();
+ const file=document.getElementById('pdfFile').files[0];
+ if(!title||!file)return msg('PDF title aur file select karein.',true);
+ if(file.type!=='application/pdf')return msg('Please select a PDF file.',true);
+ const path=Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+ const {error:upErr}=await db.storage.from(BUCKET).upload(path,file);
+ if(upErr)return msg('PDF upload error: '+upErr.message,true);
+ const {error:rowErr}=await db.from('course_resources').insert({title,file_path:path});
+ if(rowErr)return msg('File upload hui lekin record save nahi hua: '+rowErr.message,true);
+ document.getElementById('pdfTitle').value='';
+ document.getElementById('pdfFile').value='';
+ msg('PDF uploaded successfully.');
+ loadPDFs();
 }
-
-$('createClassButton').onclick=async()=>{
- const values={
-  class_type:$('classTitle').value.trim(),
-  class_date:$('classDate').value,
-  start_time:$('classTime').value,
-  teacher_name:$('teacherName').value.trim(),
-  meeting_link:$('meetingLink').value.trim()
+async function loadPDFs(){
+ const {data,error}=await db.from('course_resources').select('*').order('created_at',{ascending:false});
+ if(error)return document.getElementById('pdfList').textContent='PDF error: '+error.message;
+ const box=document.getElementById('pdfList');box.innerHTML='';
+ if(!data?.length){box.textContent='No PDF books uploaded yet.';return;}
+ for(const item of data){
+ const div=document.createElement('div');div.className='item';
+ const title=document.createElement('strong');title.textContent=item.title||'PDF Book';
+ div.appendChild(title);
+ const open=document.createElement('button');open.textContent='Open PDF';open.className='gold';
+ open.onclick=async()=>{
+ const {data,error}=await db.storage.from(BUCKET).createSignedUrl(item.file_path,3600);
+ if(error)return msg('PDF open error: '+error.message,true);
+ window.open(data.signedUrl,'_blank');
  };
- if(!values.class_type||!values.class_date){msg('classMessage','Enter class title and date.',true);return;}
- const {error}=await supabase.from('class_sections').insert(values);
- if(error){msg('classMessage',error.message,true);return;}
- msg('classMessage','Class published.');
- ['classTitle','classDate','classTime','teacherName','meetingLink'].forEach(id=>$(id).value='');
+ div.appendChild(open);
+ if(admin()){
+ const del=document.createElement('button');del.textContent='Delete';del.className='red';
+ del.onclick=async()=>{
+ if(!confirm('Delete this PDF?'))return;
+ const {error:e1}=await db.storage.from(BUCKET).remove([item.file_path]);
+ if(e1)return msg(e1.message,true);
+ const {error:e2}=await db.from('course_resources').delete().eq('id',item.id);
+ if(e2)return msg(e2.message,true);
+ loadPDFs();
+ };
+ div.appendChild(del);
+ }
+ box.appendChild(div);
+ }
+}
+
+async function publishClass(){
+ const row={
+ class_type:document.getElementById('classType').value.trim(),
+ class_date:document.getElementById('classDate').value,
+ start_time:document.getElementById('classTime').value,
+ teacher_name:document.getElementById('teacherName').value.trim(),
+ meeting_link:document.getElementById('meetingLink').value.trim()
+ };
+ if(!row.class_type||!row.class_date||!row.start_time||!row.meeting_link)return msg('Class ki tamam details fill karein.',true);
+ const {error}=await db.from('class_sections').insert(row);
+ if(error)return msg('Class publish error: '+error.message,true);
+ msg('Class published.');
  loadClasses();
-};
-
-async function loadQuizzes(){
- const box=$('quizList');box.replaceChildren();
- const {data,error}=await supabase.from('quizzes').select('*').order('created_at',{ascending:false});
- if(error){box.textContent=error.message;return;}
- if(!data?.length){box.textContent='No quizzes available.';return;}
- const sel=$('adminQuizSelect');
- if(sel)sel.innerHTML='<option value="">Select quiz</option>';
- data.forEach(q=>{
-  if(isAdmin()&&sel){
-   const op=document.createElement('option');op.value=q.id;op.textContent=q.subject;sel.append(op);
-  }
-  if(q.is_published){
-   const item=document.createElement('div');item.className='item';
-   item.append(safeText('strong',q.subject||'Quiz'));
-   item.append(safeText('p',q.available_until?'Available until: '+new Date(q.available_until).toLocaleString():''));
-   item.append(makeButton('Attempt Quiz',()=>startQuiz(q)));
-   box.append(item);
-  }
- });
- if(!box.childNodes.length)box.textContent='No published quizzes available.';
 }
-
-$('createQuizButton').onclick=async()=>{
- const subject=$('quizSubject').value.trim(),until=$('quizUntil').value;
- if(!subject){msg('quizMessage','Enter quiz title.',true);return;}
- const {data,error}=await supabase.from('quizzes').insert({
-  subject,available_until:until?new Date(until).toISOString():null,is_published:true
- }).select().single();
- if(error){msg('quizMessage',error.message,true);return;}
- msg('quizMessage','Quiz created. Now add questions below.');
- $('quizSubject').value='';
- loadQuizzes();
- if(data){
-  const op=document.createElement('option');op.value=data.id;op.textContent=data.subject;
-  $('adminQuizSelect').append(op);$('adminQuizSelect').value=data.id;
- }
-};
-
-$('addQuestionButton').onclick=async()=>{
- const quizId=$('adminQuizSelect').value;
- const text=$('questionText').value.trim();
- const opts=[$('optA').value.trim(),$('optB').value.trim(),$('optC').value.trim(),$('optD').value.trim()];
- const correct=Number($('correctOption').value);
- if(!quizId||!text||opts.some(x=>!x)){msg('questionMessage','Select a quiz, write question, and fill all four options.',true);return;}
- const {error}=await supabase.from('quiz_questions').insert({
-  quiz_id:quizId,question_text:text,options:opts,correct_answer:String(correct)
- });
- if(error){msg('questionMessage',error.message,true);return;}
- msg('questionMessage','Question added successfully.');
- $('questionText').value='';
- ['optA','optB','optC','optD'].forEach(id=>$(id).value='');
-};
-
-async function startQuiz(quiz){
- activeQuiz=quiz;
- $('quizArea').classList.remove('hidden');
- $('quizArea').replaceChildren(safeText('h3',quiz.subject||'Quiz'));
- const {data,error}=await supabase.rpc('get_quiz_questions',{p_quiz_id:quiz.id});
- if(error){$('quizArea').append(safeText('p','Could not load questions: '+error.message));return;}
- activeQuestions=data||[];
- if(!activeQuestions.length){$('quizArea').append(safeText('p','No questions added yet.'));return;}
- const form=document.createElement('form');form.id='attemptForm';
- activeQuestions.forEach((q,i)=>{
-  const block=document.createElement('div');block.className='item';
-  block.append(safeText('strong',`${i+1}. ${q.question_text}`));
-  let options=q.options;
-  if(typeof options==='string'){try{options=JSON.parse(options)}catch{options=[]}}
-  (Array.isArray(options)?options:[]).forEach((op,j)=>{
-   const label=document.createElement('label');label.className='option';
-   const input=document.createElement('input');input.type='radio';
-   input.name='q_'+q.id;input.value=String(j);input.required=true;
-   label.append(input,safeText('span',String(op)));block.append(label);
-  });
-  form.append(block);
- });
- const submit=document.createElement('button');
- submit.type='submit';submit.textContent='Submit Quiz';form.append(submit);
- form.onsubmit=async e=>{
-  e.preventDefault();
-  const answers=activeQuestions.map(q=>({
-   question_id:q.id,
-   selected_answer:form.querySelector(`input[name="q_${q.id}"]:checked`)?.value
-  }));
-  submit.disabled=true;
-  const {data,error}=await supabase.rpc('submit_quiz',{p_quiz_id:activeQuiz.id,p_answers:answers});
-  submit.disabled=false;
-  if(error){alert('Quiz submit error: '+error.message);return;}
-  const score=typeof data==='object'&&data!==null?(data.score??data[0]?.score??'Submitted'):data;
-  alert('Quiz submitted. Result: '+score);
-  $('quizArea').classList.add('hidden');
-  await loadResults();
+async function loadClasses(){
+ const {data,error}=await db.from('class_sections').select('*').order('class_date',{ascending:false});
+ const box=document.getElementById('classList');box.innerHTML='';
+ if(error){box.textContent='Class error: '+error.message;return;}
+ if(!data?.length){box.textContent='No classes published yet.';return;}
+ data.forEach(c=>{
+ const div=document.createElement('div');div.className='item';
+ div.innerHTML='<strong></strong><p class="small"></p>';
+ div.querySelector('strong').textContent=c.class_type||'Class';
+ div.querySelector('p').textContent='Date: '+(c.class_date||'')+' | Time: '+(c.start_time||'')+' | Teacher: '+(c.teacher_name||'');
+ const a=document.createElement('a');a.href=c.meeting_link;a.target='_blank';a.rel='noopener';a.textContent='Join Class';
+ const p=document.createElement('p');p.appendChild(a);div.appendChild(p);
+ if(admin()){
+ const del=document.createElement('button');del.textContent='Delete Class';del.className='red';
+ del.onclick=async()=>{
+ if(!confirm('Delete this class?'))return;
+ const {error}=await db.from('class_sections').delete().eq('id',c.id);
+ if(error)return msg(error.message,true);loadClasses();
  };
- $('quizArea').append(form);
- $('quizArea').scrollIntoView({behavior:'smooth'});
+ div.appendChild(del);
+ }
+ box.appendChild(div);
+ });
 }
 
-$('markAttendanceButton').onclick=async()=>{
- const classId=$('attendanceClassSelect').value;
- const studentId=$('attendanceStudentId').value.trim();
- if(!classId||!studentId){msg('attendanceMessage','Select class and enter student UUID.',true);return;}
- const {error}=await supabase.from('attendance').upsert({
-  student_id:studentId,class_id:classId,present:$('attendancePresent').value==='true'
- },{onConflict:'student_id,class_id'});
- if(error){msg('attendanceMessage',error.message,true);return;}
- msg('attendanceMessage','Attendance saved.');
-};
+async function createQuiz(){
+ const subject=document.getElementById('quizSubject').value.trim();
+ const until=document.getElementById('quizUntil').value;
+ if(!subject)return msg('Quiz subject likhein.',true);
+ const {data,error}=await db.from('quizzes').insert({
+ subject,available_until:until||null,is_published:false
+ }).select().single();
+ if(error)return msg('Quiz create error: '+error.message,true);
+ activeQuiz=data;questionCount=0;
+ document.getElementById('questionForm').classList.remove('hidden');
+ document.getElementById('questionCount').textContent='Questions added: 0';
+ msg('Quiz created. Ab questions add karein.');
+}
+async function addQuestion(){
+ if(!activeQuiz)return msg('Pehle quiz create karein.',true);
+ const question_text=document.getElementById('questionText').value.trim();
+ const options=[0,1,2,3].map(i=>document.getElementById('opt'+i).value.trim());
+ const correct=Number(document.getElementById('correctAnswer').value);
+ if(!question_text||options.some(x=>!x))return msg('Question aur chaaron options fill karein.',true);
+ const {error}=await db.from('quiz_questions').insert({
+ quiz_id:activeQuiz.id,question_text,options,correct_answer:String(correct)
+ });
+ if(error)return msg('Question upload error: '+error.message,true);
+ questionCount++;
+ document.getElementById('questionCount').textContent='Questions added: '+questionCount;
+ document.getElementById('questionText').value='';
+ [0,1,2,3].forEach(i=>document.getElementById('opt'+i).value='');
+ msg('Question saved. Agla question add kar sakti hain.');
+}
+async function publishQuiz(){
+ if(!activeQuiz||questionCount===0)return msg('Kam az kam ek question add karein.',true);
+ const {error}=await db.from('quizzes').update({is_published:true}).eq('id',activeQuiz.id);
+ if(error)return msg('Publish error: '+error.message,true);
+ document.getElementById('questionForm').classList.add('hidden');
+ activeQuiz=null;questionCount=0;
+ msg('Quiz published successfully.');
+ loadQuizzes();
+}
+async function loadQuizzes(){
+ const {data,error}=await db.from('quizzes').select('*').order('created_at',{ascending:false});
+ const box=document.getElementById('quizList');box.innerHTML='';
+ if(error){box.textContent='Quiz error: '+error.message;return;}
+ const list=(data||[]).filter(q=>admin()||q.is_published);
+ if(!list.length){box.textContent='No quizzes available.';return;}
+ list.forEach(q=>{
+ const div=document.createElement('div');div.className='item';
+ const title=document.createElement('strong');title.textContent=q.subject||'Quiz';
+ div.appendChild(title);
+ const p=document.createElement('p');p.className='small';p.textContent='Available until: '+(q.available_until||'No expiry set');div.appendChild(p);
+ if(!admin()){
+ const b=document.createElement('button');b.textContent='Attempt Quiz';b.className='gold';b.onclick=()=>startQuiz(q);div.appendChild(b);
+ }else{
+ const b=document.createElement('button');b.textContent='Delete Quiz';b.className='red';
+ b.onclick=async()=>{
+ if(!confirm('Delete this quiz?'))return;
+ const {error}=await db.from('quizzes').delete().eq('id',q.id);
+ if(error)return msg(error.message,true);loadQuizzes();
+ };div.appendChild(b);
+ }
+ box.appendChild(div);
+ });
+}
+async function startQuiz(q){
+ const area=document.getElementById('quizAttempt');area.classList.remove('hidden');area.innerHTML='Loading questions...';
+ const {data,error}=await db.rpc('get_quiz_questions',{p_quiz_id:q.id});
+ if(error){area.textContent='Quiz questions load error: '+error.message;return;}
+ if(!data?.length){area.textContent='Is quiz mein questions nahi hain.';return;}
+ area.innerHTML='';
+ const heading=document.createElement('h3');heading.textContent=q.subject;area.appendChild(heading);
+ const answers={};
+ data.forEach((item,index)=>{
+ const div=document.createElement('div');div.className='item';
+ const question=document.createElement('p');question.textContent=(index+1)+'. '+item.question_text;div.appendChild(question);
+ (item.options||[]).forEach((opt,i)=>{
+ const label=document.createElement('label');label.style.display='block';label.style.margin='9px 0';
+ const radio=document.createElement('input');radio.type='radio';radio.name='q_'+item.id;radio.value=i;radio.style.width='auto';radio.style.margin='0 7px';
+ radio.onchange=()=>answers[item.id]=i;
+ label.appendChild(radio);label.appendChild(document.createTextNode(String.fromCharCode(65+i)+'. '+opt));div.appendChild(label);
+ });
+ area.appendChild(div);
+ });
+ const submit=document.createElement('button');submit.textContent='Submit Quiz';submit.className='green';
+ submit.onclick=async()=>{
+ if(Object.keys(answers).length!==data.length)return msg('Har question ka answer select karein.',true);
+ submit.disabled=true;submit.textContent='Submitting...';
+ const {data:result,error}=await db.rpc('submit_quiz',{p_quiz_id:q.id,p_answers:answers});
+ submit.disabled=false;submit.textContent='Submit Quiz';
+ if(error)return msg('Submit error: '+error.message,true);
+ area.innerHTML='';
+ const score=document.createElement('h3');score.textContent='Your Score: '+(result.score??'')+' / '+(result.total??data.length);area.appendChild(score);
+ if(result.feedback){
+ result.feedback.forEach((f,i)=>{
+ const d=document.createElement('div');d.className='item';
+ d.textContent='Question '+(i+1)+': '+(f.is_correct?'Correct':'Incorrect')+(f.correct_answer!==undefined?' | Correct answer: '+f.correct_answer:'');
+ area.appendChild(d);
+ });
+ }
+ msg('Quiz submitted successfully.');
+ loadResults();
+ };
+ area.appendChild(submit);
+ area.scrollIntoView({behavior:'smooth'});
+}
 
 async function loadAttendance(){
- const box=$('myAttendance');box.replaceChildren();
- const {data,error}=await supabase.from('attendance').select('id,present,class_id,created_at').eq('student_id',currentUser.id).order('created_at',{ascending:false});
- if(error){box.textContent=error.message;return;}
- if(!data?.length){box.textContent='No attendance records yet.';return;}
+ const box=document.getElementById('attendanceList');box.innerHTML='Loading...';
+ if(admin()){
+ const [{data:classes,error:e1},{data:students,error:e2}]=await Promise.all([
+ db.from('class_sections').select('id,class_type,class_date').order('class_date',{ascending:false}),
+ db.from('profiles').select('id,full_name').eq('role','student').order('full_name')
+ ]);
+ if(e1||e2){box.textContent='Attendance setup error: '+(e1?.message||e2?.message);return;}
+ const cs=document.getElementById('attendanceClass'),ss=document.getElementById('attendanceStudent');
+ cs.innerHTML='';ss.innerHTML='';
+ (classes||[]).forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=(c.class_type||'Class')+' - '+c.class_date;cs.appendChild(o)});
+ (students||[]).forEach(s=>{const o=document.createElement('option');o.value=s.id;o.textContent=s.full_name||s.id;ss.appendChild(o)});
+ if(!classes?.length||!students?.length)box.textContent='Pehle class publish karein aur students register hon.';
+ }else{
+ const {data,error}=await db.from('attendance').select('student_id,class_id,present,created_at,class_sections(class_type,class_date)').eq('student_id',currentUser.id).order('created_at',{ascending:false});
+ if(error){box.textContent='Attendance load error: '+error.message;return;}
+ box.innerHTML='';
+ if(!data?.length){box.textContent='Abhi aapki attendance record nahi hui.';return;}
  data.forEach(a=>{
-  const item=document.createElement('div');item.className='item';
-  item.textContent=(a.present?'Present':'Absent')+' | '+a.created_at;
-  box.append(item);
+ const div=document.createElement('div');div.className='item';
+ div.textContent=(a.class_sections?.class_type||'Class')+' | '+(a.class_sections?.class_date||'')+' | '+(a.present?'Present':'Absent');
+ box.appendChild(div);
  });
+ }
+}
+async function markAttendance(){
+ const class_id=document.getElementById('attendanceClass').value;
+ const student_id=document.getElementById('attendanceStudent').value;
+ if(!class_id||!student_id)return msg('Class aur student select karein.',true);
+ const present=document.getElementById('attendanceStatus').value==='true';
+ const {error}=await db.from('attendance').upsert(
+ {student_id,class_id,present},
+ {onConflict:'student_id,class_id'}
+ );
+ if(error)return msg('Attendance save error: '+error.message,true);
+ msg('Attendance saved successfully.');
 }
 
 async function loadResults(){
- const box=$('myResults');box.replaceChildren();
- const {data,error}=await supabase.from('quiz_attempts').select('id,quiz_id,score,completed_at').eq('student_id',currentUser.id).order('completed_at',{ascending:false});
- if(error){box.textContent=error.message;return;}
+ const box=document.getElementById('resultList');box.innerHTML='Loading...';
+ let query=db.from('quiz_attempts').select('student_id,quiz_id,score,completed_at,quizzes(subject)').order('completed_at',{ascending:false});
+ if(!admin())query=query.eq('student_id',currentUser.id);
+ const {data,error}=await query;
+ if(error){box.textContent='Results load error: '+error.message;return;}
+ box.innerHTML='';
  if(!data?.length){box.textContent='No quiz results yet.';return;}
  data.forEach(r=>{
-  const item=document.createElement('div');item.className='item';
-  item.textContent='Score: '+r.score+' | '+(r.completed_at||'');
-  box.append(item);
+ const div=document.createElement('div');div.className='item';
+ div.textContent=(r.quizzes?.subject||'Quiz')+' | Score: '+r.score+' | '+(r.completed_at||'');
+ box.appendChild(div);
  });
 }
-
-const {data:{session}}=await supabase.auth.getSession();
-if(session)await loadDashboard(session.user);
-supabase.auth.onAuthStateChange((event,session)=>{
- if(event==='SIGNED_OUT'){
-  $('dashboard').classList.add('hidden');
-  $('authPanel').classList.remove('hidden');
- }else if(event==='SIGNED_IN'&&session){
-  loadDashboard(session.user);
- }
-});
 </script>
 </body>
 </html>
