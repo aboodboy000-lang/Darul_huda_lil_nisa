@@ -213,3 +213,566 @@ a.join{display:inline-block;background:var(--green);color:white;text-decoration:
 </main>
 <footer>Darul Huda lil Nisaa</footer>
 <script>
+
+const SUPABASE_URL="https://wcbeidolajiqxrwpjhze.supabase.co";
+const SUPABASE_KEY="sb_publishable_6XuyNg8XOIEd2UmjLIG7Yw_4ohvWgNC";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+let currentUser=null,currentProfile=null,currentQuiz=null,quizQuestions=[],selectedDraftQuiz=null;
+
+function message(text){
+ const box=document.getElementById("message");
+ box.textContent=text;
+ box.classList.remove("hidden");
+}
+function clearMessage(){
+ document.getElementById("message").classList.add("hidden");
+}
+function togglePassword(){
+ const p=document.getElementById("password");
+ p.type=p.type==="password"?"text":"password";
+}
+function showRegister(){
+ document.getElementById("fullName").classList.remove("hidden");
+ document.getElementById("nameLabel").classList.remove("hidden");
+ document.getElementById("registerBtn").classList.remove("hidden");
+}
+async function login(){
+ clearMessage();
+ const email=document.getElementById("email").value.trim();
+ const password=document.getElementById("password").value;
+ if(!email||!password)return message("Email aur password dono likhiye.");
+ const {error}=await db.auth.signInWithPassword({email,password});
+ if(error)return message(error.message);
+ await loadDashboard();
+}
+async function register(){
+ clearMessage();
+ const email=document.getElementById("email").value.trim();
+ const password=document.getElementById("password").value;
+ const full_name=document.getElementById("fullName").value.trim();
+ if(!email||!password||!full_name)return message("Name, email aur password bharna zaroori hai.");
+ if(password.length<6)return message("Password kam az kam 6 characters ka rakhiye.");
+ const {data,error}=await db.auth.signUp({email,password,options:{data:{full_name}}});
+ if(error)return message(error.message);
+ message("Registration request submit ho gayi. Email confirmation required ho to email verify karein.");
+ if(data.session)await loadDashboard();
+}
+async function logout(){
+ await db.auth.signOut();
+ currentUser=null;currentProfile=null;currentQuiz=null;
+ document.getElementById("dashboard").classList.add("hidden");
+ document.getElementById("authSection").classList.remove("hidden");
+ message("Aap logout ho gayi hain.");
+}
+async function loadDashboard(){
+ clearMessage();
+ const {data:{user},error}=await db.auth.getUser();
+ if(error||!user)return;
+ currentUser=user;
+ const {data:profile,error:profileError}=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();
+ if(profileError)return message("Profile load error: "+profileError.message);
+ if(!profile)return message("Profiles table mein aapki profile nahi mili. Admin se setup karwayein.");
+ currentProfile=profile;
+ document.getElementById("authSection").classList.add("hidden");
+ document.getElementById("dashboard").classList.remove("hidden");
+ document.getElementById("welcome").textContent="Assalamu Alaikum, "+(profile.full_name||user.email);
+ const admin=profile.role==="admin";
+ document.getElementById("roleText").textContent=admin?"Admin Dashboard":"Student Dashboard";
+ ["resourceAdmin","classAdmin","quizAdmin","adminStats","adminResults"].forEach(id=>document.getElementById(id).classList.toggle("hidden",!admin));
+ document.getElementById("resultsHeading").textContent=admin?"Quiz Results":"My Quiz Results";
+ await Promise.all([loadResources(),loadClasses(),loadQuizzes(),loadResults(),loadAttendance()]);
+ if(admin)await refreshAdminStats();
+}
+function showTab(name){
+ document.querySelectorAll(".tab").forEach(el=>el.classList.add("hidden"));
+ document.getElementById(name+"Tab").classList.remove("hidden");
+ if(name==="results"&&currentProfile?.role==="admin")loadAdminResults();
+ if(name==="home"&&currentProfile?.role==="admin")refreshAdminStats();
+}
+
+/* PDFS */
+async function loadResources(){
+ const box=document.getElementById("resourceList");
+ const {data,error}=await db.from("course_resources").select("*").order("created_at",{ascending:false});
+ if(error){box.textContent="Resources load error: "+error.message;return;}
+ box.innerHTML="";
+ if(!data?.length){box.textContent="Abhi koi PDF upload nahi hui.";return;}
+ data.forEach(r=>{
+  const div=document.createElement("div");div.className="item";
+  const title=document.createElement("h3");title.textContent=r.title||"Course PDF";
+  const subject=document.createElement("p");subject.textContent=r.subject||"";
+  const link=document.createElement("a");
+  link.href=r.file_url;link.target="_blank";link.rel="noopener";link.textContent="Open PDF";
+  div.append(title,subject,link);box.appendChild(div);
+ });
+}
+async function uploadPDF(){
+ const file=document.getElementById("pdfFile").files[0];
+ const title=document.getElementById("resourceTitle").value.trim();
+ const subject=document.getElementById("resourceSubject").value;
+ if(!file||!title)return message("PDF file aur book title select kijiye.");
+ if(file.type!=="application/pdf")return message("Sirf PDF file upload karein.");
+ const path=Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+ const {error:uploadError}=await db.storage.from("Darul_huda_lil_nisa").upload(path,file);
+ if(uploadError)return message("PDF upload error: "+uploadError.message);
+ const {data:urlData}=db.storage.from("Darul_huda_lil_nisa").getPublicUrl(path);
+ const {error}=await db.from("course_resources").insert({title,subject,file_url:urlData.publicUrl});
+ if(error)return message("PDF upload hui, database entry error: "+error.message);
+ message("PDF upload ho gayi.");
+ document.getElementById("resourceTitle").value="";
+ document.getElementById("pdfFile").value="";
+ await loadResources();
+ await refreshAdminStats();
+}
+
+/* ADMIN COUNTS */
+async function refreshAdminStats(){
+ if(currentProfile?.role!=="admin")return;
+ const [pdfs,quizzes]=await Promise.all([
+  db.from("course_resources").select("subject"),
+  db.from("quizzes").select("is_published")
+ ]);
+ if(pdfs.error){message("PDF count permission/error: "+pdfs.error.message);return;}
+ if(quizzes.error){message("Quiz count permission/error: "+quizzes.error.message);return;}
+ const rows=pdfs.data||[],qrows=quizzes.data||[];
+ document.getElementById("statPDF").textContent=rows.length;
+ document.getElementById("statAqeedahPDF").textContent=rows.filter(x=>(x.subject||"").toLowerCase()==="aqeedah").length;
+ document.getElementById("statFiqhPDF").textContent=rows.filter(x=>(x.subject||"").toLowerCase()==="fiqh").length;
+ document.getElementById("statTafseerPDF").textContent=rows.filter(x=>(x.subject||"").toLowerCase()==="tafseer").length;
+ document.getElementById("statQuiz").textContent=qrows.length;
+ document.getElementById("statPublished").textContent=qrows.filter(x=>x.is_published===true).length;
+ document.getElementById("statDraft").textContent=qrows.filter(x=>x.is_published!==true).length;
+}
+
+/* CLASSES */
+async function loadClasses(){
+ const box=document.getElementById("classList");
+ const {data,error}=await db.from("class_sections").select("*").order("class_date",{ascending:true});
+ if(error){box.textContent="Class schedule error: "+error.message;return;}
+ box.innerHTML="";
+ if(!data?.length){box.textContent="Abhi class schedule add nahi hua.";return;}
+ data.forEach(c=>{
+  const div=document.createElement("div");div.className="item";
+  const h=document.createElement("h3");h.textContent=c.title||"Class";
+  const p=document.createElement("p");
+  p.textContent=[c.subject,c.class_date,c.class_time,c.teacher].filter(Boolean).join(" | ");
+  div.append(h,p);
+  if(c.class_link){
+   const a=document.createElement("a");
+   a.href=c.class_link;a.target="_blank";a.rel="noopener";
+   a.className="join";a.textContent="Join Class";
+   div.appendChild(a);
+  }
+  box.appendChild(div);
+ });
+}
+async function addClass(){
+ const record={
+  title:document.getElementById("classTitle").value.trim(),
+  subject:document.getElementById("classSubject").value.trim(),
+  class_date:document.getElementById("classDate").value,
+  class_time:document.getElementById("classTime").value||null,
+  teacher:document.getElementById("teacherName").value.trim(),
+  class_link:document.getElementById("classLink").value.trim()||null
+ };
+ if(!record.title||!record.class_date)return message("Class title aur date zaroor likhiye.");
+ const {error}=await db.from("class_sections").insert(record);
+ if(error)return message("Class save error: "+error.message);
+ message("Class schedule save ho gaya.");
+ ["classTitle","classSubject","classDate","classTime","teacherName","classLink"].forEach(id=>document.getElementById(id).value="");
+ await loadClasses();
+}
+
+/* QUIZ LIST AND DRAFTS */
+async function loadQuizzes(){
+ const box=document.getElementById("quizList");
+ const {data,error}=await db.from("quizzes").select("*").eq("is_published",true).order("created_at",{ascending:false});
+ if(error){box.textContent="Quiz load error: "+error.message;return;}
+ box.innerHTML="";
+ if(!data?.length)box.textContent="Abhi koi published quiz nahi hai.";
+ (data||[]).forEach(q=>{
+  const div=document.createElement("div");div.className="item";
+  const h=document.createElement("h3");h.textContent=q.title;
+  const p=document.createElement("p");p.textContent=q.subject||"";
+  const b=document.createElement("button");b.textContent="Start Quiz";
+  b.onclick=()=>startQuiz(q);
+  div.append(h,p,b);box.appendChild(div);
+ });
+ if(currentProfile?.role==="admin")await loadDraftQuizzes();
+}
+async function loadDraftQuizzes(){
+ const select=document.getElementById("draftQuizSelect");
+ const {data,error}=await db.from("quizzes").select("*").eq("is_published",false).order("created_at",{ascending:false});
+ if(error)return message("Draft load error: "+error.message);
+ select.innerHTML='<option value="">Select a draft quiz</option>';
+ (data||[]).forEach(q=>{
+  const op=document.createElement("option");
+  op.value=q.id;op.textContent=q.title+" - "+q.subject;
+  select.appendChild(op);
+ });
+}
+async function createQuiz(){
+ const title=document.getElementById("quizTitle").value.trim();
+ const subject=document.getElementById("quizSubject").value;
+ const until=document.getElementById("quizUntil").value;
+ if(!title)return message("Quiz title likhiye.");
+ const {data,error}=await db.from("quizzes").insert({
+  title,subject,available_until:until||null,is_published:false
+ }).select().single();
+ if(error)return message("Quiz create error: "+error.message);
+ document.getElementById("quizTitle").value="";
+ message("Quiz draft create ho gaya. Ab questions add karein.");
+ await loadDraftQuizzes();
+ document.getElementById("draftQuizSelect").value=data.id;
+ selectedDraftQuiz=data;
+ document.getElementById("questionEditor").classList.remove("hidden");
+ document.getElementById("addedQuestionList").innerHTML="";
+}
+async function selectDraftQuiz(){
+ const id=document.getElementById("draftQuizSelect").value;
+ if(!id){
+  selectedDraftQuiz=null;
+  document.getElementById("questionEditor").classList.add("hidden");
+  return;
+ }
+ const {data,error}=await db.from("quizzes").select("*").eq("id",id).single();
+ if(error)return message(error.message);
+ selectedDraftQuiz=data;
+ document.getElementById("questionEditor").classList.remove("hidden");
+ await showDraftQuestions();
+}
+async function showDraftQuestions(){
+ if(!selectedDraftQuiz)return;
+ const box=document.getElementById("addedQuestionList");
+ const {data,error}=await db.from("quiz_questions").select("*").eq("quiz_id",selectedDraftQuiz.id);
+ if(error){box.textContent=error.message;return;}
+ box.innerHTML="<h3>Added Questions</h3>";
+ if(!data?.length){box.textContent="Abhi koi question add nahi hua.";return;}
+ data.forEach((q,i)=>{
+  const p=document.createElement("p");
+  p.textContent=(i+1)+". "+q.question_text;
+  box.appendChild(p);
+ });
+}
+async function addQuestion(){
+ if(!selectedDraftQuiz)return message("Pehle draft quiz select karein.");
+ const question=document.getElementById("newQuestion").value.trim();
+ const options=[
+  document.getElementById("optionA").value.trim(),
+  document.getElementById("optionB").value.trim(),
+  document.getElementById("optionC").value.trim(),
+  document.getElementById("optionD").value.trim()
+ ];
+ const correct=Number(document.getElementById("correctOption").value);
+ if(!question||options.some(x=>!x))return message("Question aur chaaron options bharna zaroori hai.");
+ const {data:q,error:qError}=await db.from("quiz_questions").insert({
+  quiz_id:selectedDraftQuiz.id,question_text:question
+ }).select().single();
+ if(qError)return message("Question save error: "+qError.message);
+ const optionRows=options.map(text=>({question_id:q.id,option_text:text}));
+ const {data:insertedOptions,error:optionError}=await db.from("quiz_options").insert(optionRows).select();
+ if(optionError)return message("Options save error: "+optionError.message);
+ const correctOption=insertedOptions[correct];
+ const {error:keyError}=await db.from("quiz_answer_key").insert({
+  question_id:q.id,correct_option_id:correctOption.id
+ });
+ if(keyError)return message("Correct answer save error: "+keyError.message);
+ message("Question successfully added.");
+ ["newQuestion","optionA","optionB","optionC","optionD"].forEach(id=>document.getElementById(id).value="");
+ await showDraftQuestions();
+}
+async function publishQuiz(){
+ if(!selectedDraftQuiz)return message("Draft quiz select karein.");
+ const {count,error:countError}=await db.from("quiz_questions").select("*",{count:"exact",head:true}).eq("quiz_id",selectedDraftQuiz.id);
+ if(countError)return message("Question check error: "+countError.message);
+ if(!count)return message("Publish karne se pehle kam az kam ek question add karein.");
+ const {error}=await db.from("quizzes").update({is_published:true}).eq("id",selectedDraftQuiz.id);
+ if(error)return message("Publish error: "+error.message);
+ message("Quiz successfully published. Ab students ko nazar aayega.");
+ selectedDraftQuiz=null;
+ document.getElementById("questionEditor").classList.add("hidden");
+ document.getElementById("draftQuizSelect").value="";
+ await loadQuizzes();
+ await refreshAdminStats();
+}
+
+/* STUDENT QUIZ */
+async function startQuiz(quiz){
+ if(quiz.available_until&&new Date(quiz.available_until)<new Date())return message("Is quiz ki availability khatam ho chuki hai.");
+ currentQuiz=quiz;
+ const area=document.getElementById("quizArea");
+ area.innerHTML="<p>Questions load ho rahe hain...</p>";
+ const {data:questions,error}=await db.from("quiz_questions").select("*").eq("quiz_id",quiz.id);
+ if(error){area.textContent="Questions load error: "+error.message;return;}
+ quizQuestions=[];
+ for(const q of (questions||[])){
+  const {data:options,error:optionError}=await db.from("quiz_options").select("id,option_text").eq("question_id",q.id);
+  if(optionError){area.textContent=optionError.message;return;}
+  quizQuestions.push({...q,options:options||[]});
+ }
+ if(!quizQuestions.length){area.textContent="Is quiz mein abhi questions nahi hain.";return;}
+ area.innerHTML="";
+ const heading=document.createElement("h3");heading.textContent=quiz.title;area.appendChild(heading);
+ quizQuestions.forEach((q,i)=>{
+  const div=document.createElement("div");div.className="item";
+  const p=document.createElement("p");p.textContent=(i+1)+". "+q.question_text;
+  div.appendChild(p);
+  q.options.forEach(option=>{
+   const label=document.createElement("label");label.className="option-label";
+   const radio=document.createElement("input");
+   radio.type="radio";radio.name="question_"+q.id;radio.value=option.id;
+   label.append(radio,document.createTextNode(option.option_text));
+   div.appendChild(label);
+  });
+  area.appendChild(div);
+ });
+ const submit=document.createElement("button");
+ submit.textContent="Submit Quiz";submit.onclick=submitQuiz;
+ area.appendChild(submit);
+}
+async function submitQuiz(){
+ const answers=[];
+ for(const q of quizQuestions){
+  const selected=document.querySelector('input[name="question_'+q.id+'"]:checked');
+  if(!selected)return message("Har question ka jawab select kijiye.");
+  answers.push({question_id:q.id,selected_option_id:selected.value});
+ }
+ const {data,error}=await db.rpc("submit_quiz",{
+  p_quiz_id:currentQuiz.id,p_answers:answers
+ });
+ if(error)return message("Quiz submit error: "+error.message);
+ const area=document.getElementById("quizArea");
+ area.innerHTML="<h3>Quiz Result</h3>";
+ const score=document.createElement("p");
+ score.textContent="Your Score: "+data.score+" / "+data.total_questions;
+ area.appendChild(score);
+ const details=data.details||[];
+ details.forEach((d,i)=>{
+  const div=document.createElement("div");div.className="item";
+  const question=document.createElement("p");
+  question.textContent=(i+1)+". "+(d.question_text||d.question||"Question");
+  div.appendChild(question);
+  const result=document.createElement("p");
+  const isCorrect=d.is_correct===true;
+  result.textContent=isCorrect?"Your answer is correct":"Your answer is incorrect";
+  result.className=isCorrect?"correct-text":"wrong-text";
+  div.appendChild(result);
+  const correct=document.createElement("p");
+  correct.textContent="Correct answer: "+(d.correct_option_text||d.correct_option||d.correct_answer||"");
+  div.appendChild(correct);
+  area.appendChild(div);
+ });
+ message("Quiz submitted successfully. Your score is shown.");
+ await loadResults();
+}
+
+/* STUDENT RESULTS */
+async function loadResults(){
+ const box=document.getElementById("resultList");
+ if(!currentUser){box.textContent="Login required.";return;}
+
+ const {data,error}=await db.from("quiz_attempts")
+  .select("id,quiz_id,score,completed_at")
+  .eq("student_id",currentUser.id)
+  .order("completed_at",{ascending:false});
+
+ if(error){box.textContent="Results load error: "+error.message;return;}
+ box.innerHTML="";
+ if(!data?.length){box.textContent="Abhi koi quiz result nahi hai.";return;}
+
+ for(const r of data){
+  const {data:quiz}=await db.from("quizzes")
+   .select("title,subject").eq("id",r.quiz_id).maybeSingle();
+
+  const div=document.createElement("div");
+  div.className="item";
+  const h=document.createElement("h3");
+  h.textContent=quiz?.title||"Quiz";
+  const p=document.createElement("p");
+  p.textContent="Subject: "+(quiz?.subject||"")+" | Score: "+r.score;
+  const date=document.createElement("p");
+  date.textContent="Completed: "+(r.completed_at||"");
+  div.append(h,p,date);
+  box.appendChild(div);
+ }
+}
+
+/* ADMIN QUIZ REPORTS */
+async function loadAdminResults(){
+ if(currentProfile?.role!=="admin")return message("Admin access required.");
+
+ const box=document.getElementById("adminResultList");
+ if(!box)return;
+ box.textContent="Reports loading...";
+
+ const {data:attempts,error}=await db.from("quiz_attempts")
+  .select("*").order("completed_at",{ascending:false});
+
+ if(error){box.textContent="Reports error: "+error.message;return;}
+ box.innerHTML="";
+
+ if(!attempts?.length){
+  box.textContent="Abhi students ne koi quiz submit nahi kiya.";
+  return;
+ }
+
+ for(const a of attempts){
+  const {data:student}=await db.from("profiles")
+   .select("full_name").eq("id",a.student_id).maybeSingle();
+
+  const {data:quiz}=await db.from("quizzes")
+   .select("title,subject").eq("id",a.quiz_id).maybeSingle();
+
+  const div=document.createElement("div");
+  div.className="item";
+
+  const h=document.createElement("h3");
+  h.textContent=student?.full_name||"Student";
+
+  const p=document.createElement("p");
+  p.textContent=(quiz?.title||"Quiz")+" | "+(quiz?.subject||"")+" | Score: "+a.score;
+
+  const date=document.createElement("p");
+  date.textContent="Submitted: "+(a.completed_at||"");
+
+  const btn=document.createElement("button");
+  btn.textContent="View Answers";
+  btn.onclick=()=>showAdminAttemptDetails(a.id);
+
+  div.append(h,p,date,btn);
+  box.appendChild(div);
+ }
+}
+
+async function showAdminAttemptDetails(attemptId){
+ const box=document.getElementById("adminResultList");
+ const detail=document.createElement("div");
+ detail.className="item";
+ detail.textContent="Answers loading...";
+ box.appendChild(detail);
+
+ const {data:responses,error}=await db.from("quiz_responses")
+  .select("*").eq("attempt_id",attemptId);
+
+ if(error){detail.textContent="Answer report error: "+error.message;return;}
+
+ detail.innerHTML="<h3>Question-wise Answers</h3>";
+
+ for(const response of (responses||[])){
+  const {data:question}=await db.from("quiz_questions")
+   .select("question_text").eq("id",response.question_id).maybeSingle();
+
+  const {data:selected}=await db.from("quiz_options")
+   .select("option_text").eq("id",response.selected_option_id).maybeSingle();
+
+  const {data:key}=await db.from("quiz_answer_key")
+   .select("correct_option_id").eq("question_id",response.question_id).maybeSingle();
+
+  let correctText="Not available";
+  if(key?.correct_option_id){
+   const {data:correct}=await db.from("quiz_options")
+    .select("option_text").eq("id",key.correct_option_id).maybeSingle();
+   if(correct)correctText=correct.option_text;
+  }
+
+  const item=document.createElement("div");
+  item.className="item";
+
+  const q=document.createElement("p");
+  q.textContent="Question: "+(question?.question_text||"");
+
+  const s=document.createElement("p");
+  s.textContent="Student answer: "+(selected?.option_text||"Not available");
+
+  const c=document.createElement("p");
+  c.textContent="Correct answer: "+correctText;
+
+  const result=document.createElement("p");
+  const isCorrect=key?.correct_option_id===response.selected_option_id;
+  result.textContent=isCorrect?"Correct":"Incorrect";
+  result.className=isCorrect?"correct-text":"wrong-text";
+
+  item.append(q,s,c,result);
+  detail.appendChild(item);
+ }
+}
+
+/* DASHBOARD COUNTS */
+async function refreshAdminStats(){
+ if(currentProfile?.role!=="admin")return;
+
+ const quizBox=document.getElementById("quizStats");
+ const pdfBox=document.getElementById("pdfStats");
+
+ const {data:quizzes,error:qError}=await db.from("quizzes").select("is_published");
+ if(!qError&&quizBox){
+  const all=quizzes||[];
+  const published=all.filter(q=>q.is_published).length;
+  const drafts=all.length-published;
+  quizBox.textContent="Total Quizzes: "+all.length+
+   " | Published: "+published+" | Drafts: "+drafts;
+ }
+
+ const {data:resources,error:rError}=await db.from("course_resources").select("subject");
+ if(!rError&&pdfBox){
+  const all=resources||[];
+  const aq=all.filter(r=>r.subject==="Aqeedah").length;
+  const fiqh=all.filter(r=>r.subject==="Fiqh").length;
+  const taf=all.filter(r=>r.subject==="Tafseer").length;
+  pdfBox.textContent="Total PDFs: "+all.length+
+   " | Aqeedah: "+aq+" | Fiqh: "+fiqh+" | Tafseer: "+taf;
+ }
+}
+
+/* ATTENDANCE */
+async function loadAttendance(){
+ const box=document.getElementById("attendanceList");
+ if(!currentUser){box.textContent="Login required.";return;}
+
+ const {data,error}=await db.from("attendance")
+  .select("*").eq("student_id",currentUser.id);
+
+ if(error){box.textContent="Attendance load error: "+error.message;return;}
+ box.innerHTML="";
+ if(!data?.length){box.textContent="Abhi attendance record nahi hai.";return;}
+
+ data.forEach(a=>{
+  const div=document.createElement("div");
+  div.className="item";
+  div.textContent="Date: "+(a.class_date||"")+
+   " | Status: "+(a.status||"Not available");
+  box.appendChild(div);
+ });
+}
+
+/* TAB NAVIGATION */
+function showTab(name){
+ document.querySelectorAll(".tab").forEach(el=>el.classList.add("hidden"));
+ const tab=document.getElementById(name+"Tab");
+ if(tab)tab.classList.remove("hidden");
+
+ if(name==="results"){
+  loadResults();
+  if(currentProfile?.role==="admin")loadAdminResults();
+ }
+ if(name==="attendance")loadAttendance();
+ if(name==="classes")loadClasses();
+ if(name==="books")loadResources();
+ if(name==="quizzes")loadQuizzes();
+}
+
+/* LOGIN SESSION */
+db.auth.onAuthStateChange((event,session)=>{
+ if(session&&event==="SIGNED_IN"){
+  setTimeout(()=>loadDashboard(),0);
+ }
+});
+
+(async()=>{
+ const {data:{session}}=await db.auth.getSession();
+ if(session)await loadDashboard();
+})();
+</script>
+</body>
+</html>
