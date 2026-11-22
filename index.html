@@ -1,449 +1,726 @@
 
-<!DOCTYPE html>  <html lang="ur" dir="rtl">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1">  
-<title>Darul Huda lil Nisaa</title>  
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  
-<style>  
-:root{--navy:#14243b;--gold:#c49a45;--cream:#f7f4ec;--border:#e4dfd3;--green:#28734e;--red:#b83b3b}  
-*{box-sizing:border-box}  
-body{margin:0;background:var(--cream);color:var(--navy);font-family:Arial,sans-serif}  
-header{background:var(--navy);color:white;text-align:center;padding:22px 12px;border-bottom:4px solid var(--gold)}  
-header h1{margin:0 0 7px;font-size:25px}  
-header p{margin:0;color:#ead7ad}  
-main{max-width:1050px;margin:20px auto;padding:0 13px}  
-.card{background:white;border:1px solid var(--border);border-radius:13px;padding:18px;margin-bottom:16px;box-shadow:0 3px 12px #14243b0c}  
-h2,h3{color:var(--navy)}  
-h2{margin-top:0}  
-input,select,textarea{width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;margin:6px 0 12px;font-size:15px;background:white}  
-textarea{min-height:80px}  
-button{border:0;background:var(--navy);color:white;border-radius:8px;padding:11px 17px;margin:4px;cursor:pointer;font-size:15px}  
-button.gold{background:var(--gold);color:#172238}  
-button.red{background:var(--red)}  
-button.green{background:var(--green)}  
-button.light{background:#e9edf2;color:var(--navy)}  
-label{display:block;font-weight:bold;margin-top:8px}  
-.hidden{display:none!important}  
-.message{padding:11px;margin:10px 0;border-radius:8px;background:#f1eee5;white-space:pre-wrap}  
-.item{border:1px solid var(--border);border-radius:9px;padding:13px;margin:10px 0;background:#fffefa}  
-nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:15px}  
-nav button{flex:1 1 115px}  
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px}  
-.stat{background:var(--navy);color:white;text-align:center;padding:15px 8px;border-radius:10px}  
-.stat strong{display:block;font-size:25px;color:#f0cf83}  
-.stat span{font-size:13px}  
-a{color:#9a7024;word-break:break-word}  
-.option-label{font-weight:normal;display:block;margin:8px 0}  
-.correct-text{color:var(--green)}  
-.wrong-text{color:var(--red)}  
-@media(max-width:600px){header h1{font-size:21px}.card{padding:14px}}  
-</style>  
-</head>  
-<body>  
-<header>  
-<h1>دار الهدى للنساء</h1>  
-<p>DARUL HUDA LIL NISAA</p>  
-<p>Online Islamic Learning Platform</p>  
-</header>  
-<main>  <section id="authSection" class="card">  
-<h2>Student / Admin Login</h2>  
-<div id="authMessage" class="message hidden"></div>  
-<label>Email</label>  
-<input id="loginEmail" type="email" placeholder="Enter your email" dir="ltr">  
-<label>Password</label>  
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Darul Huda lil Nisaa</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+--navy:#14243b;
+--gold:#c49a45;
+--cream:#f7f4ec;
+--border:#e5dfd1;
+--green:#28734e;
+--red:#b83b3b;
+}
+*{box-sizing:border-box}
+body{
+margin:0;
+background:var(--cream);
+color:var(--navy);
+font-family:Arial,sans-serif;
+}
+header{
+background:var(--navy);
+color:white;
+text-align:center;
+padding:25px 12px;
+border-bottom:4px solid var(--gold);
+}
+header h1{margin:0 0 8px}
+header p{margin:5px;color:#ead7ad}
+main{max-width:1050px;margin:22px auto;padding:0 13px}
+.card{
+background:white;
+border:1px solid var(--border);
+border-radius:13px;
+padding:18px;
+margin-bottom:16px;
+box-shadow:0 3px 12px #14243b0c;
+}
+h2,h3{color:var(--navy)}
+h2{margin-top:0}
+input,select,textarea{
+width:100%;
+padding:12px;
+border:1px solid var(--border);
+border-radius:8px;
+margin:7px 0 13px;
+font-size:15px;
+background:white;
+}
+textarea{min-height:80px}
+button{
+border:0;
+background:var(--navy);
+color:white;
+border-radius:8px;
+padding:11px 17px;
+margin:4px;
+cursor:pointer;
+font-size:15px;
+}
+button.gold{background:var(--gold);color:#172238}
+button.green{background:var(--green)}
+button.red{background:var(--red)}
+button.light{background:#e9edf2;color:var(--navy)}
+label{display:block;font-weight:bold;margin-top:8px}
+.hidden{display:none!important}
+.message{
+padding:12px;
+margin:10px 0;
+border-radius:8px;
+background:#f1eee5;
+white-space:pre-wrap;
+}
+.item{
+border:1px solid var(--border);
+border-radius:9px;
+padding:13px;
+margin:10px 0;
+background:#fffefa;
+}
+nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:15px}
+nav button{flex:1 1 115px}
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(125px,1fr));
+gap:10px;
+}
+.stat{
+background:var(--navy);
+color:white;
+text-align:center;
+padding:15px 8px;
+border-radius:10px;
+}
+.stat strong{display:block;font-size:25px;color:#f0cf83}
+.stat span{font-size:13px}
+a{color:#9a7024;word-break:break-word}
+.password-wrap{position:relative}
+.password-wrap input{padding-left:48px}
+.eye-btn{
+position:absolute;
+left:8px;
+top:7px;
+background:transparent;
+color:#14243b;
+padding:5px;
+font-size:20px;
+}
+@media(max-width:600px){
+header h1{font-size:21px}
+.card{padding:14px}
+}
+</style>
+</head>
+
+<body>
+<header>
+<h1>دار الهدى للنساء</h1>
+<p>DARUL HUDA LIL NISAA</p>
+<p>Online Islamic Learning Platform</p>
+</header>
+
+<main>
+
+<section id="authSection" class="card">
+<h2>Student / Admin Login</h2>
+<div id="authMessage" class="message hidden"></div>
+<label>Email</label>
+<input id="loginEmail" type="email" placeholder="Enter email" dir="ltr">
+<label>Password</label>
 <div class="password-wrap">
 <input id="loginPassword" type="password" placeholder="Enter password" dir="ltr">
 <button type="button" class="eye-btn" onclick="togglePassword('loginPassword',this)">👁</button>
 </div>
-<button onclick="login()">Login</button>  
-<button class="light" onclick="showRegister()">New Student Registration</button>  
-<button class="light" onclick="showForgot()">Forgot Password?</button>  
-</section>  <section id="registerSection" class="card hidden">  
-<h2>New Student Registration</h2>  
-<div id="registerMessage" class="message hidden"></div>  
-<label>Student Name</label>  
-<input id="regName" placeholder="Full name">  
-<label>Email</label>  
-<input id="regEmail" type="email" placeholder="Email" dir="ltr">  
-<label>Password</label>  
-<input id="regPassword" type="password" placeholder="Create password" dir="ltr">  
-<button class="gold" onclick="registerStudent()">Apply / Register</button>  
-<button class="light" onclick="backToLogin()">Back to Login</button>  
-</section>  <section id="forgotSection" class="card hidden">  
-<h2>Forgot Password</h2>  
-<p>Apna registered email address likhiye.</p>  
-<input id="forgotEmail" type="email" placeholder="Registered email" dir="ltr">  
-<button class="gold" onclick="forgotPassword()">Send Reset Link</button>  
-<button class="light" onclick="backToLogin()">Back to Login</button>  
-</section>  <section id="resetSection" class="card hidden">  
-<h2>Set New Password</h2>  
-<input id="newPassword" type="password" placeholder="New password">  
-<input id="confirmPassword" type="password" placeholder="Confirm password">  
-<button class="gold" onclick="updatePassword()">Update Password</button>  
-</section>  <section id="dashboard" class="hidden">  
-<div class="card">  
-<h2 id="welcomeName">Welcome</h2>  
-<p id="userRole"></p>  
-<button class="red" onclick="logout()">Logout</button>  
-</div>  <nav>  
-<button onclick="showTab('homeTab')">Home</button>  
-<button onclick="showTab('courseTab')">Courses / PDFs</button>  
-<button onclick="showTab('classTab')">Classes</button>  
-<button onclick="showTab('quizTab')">Quizzes</button>  
-<button onclick="showTab('resultTab')">My Results</button>  
-<button onclick="showTab('attendanceTab')">Attendance</button>  
-<button id="adminNav" class="gold hidden" onclick="showTab('adminTab')">Admin Panel</button>  
-</nav>  <section id="homeTab" class="card tabSection">  
-<h2>Dashboard Overview</h2>  
-<div class="stats">  
-<div class="stat"><strong id="statPDF">0</strong><span>All PDFs</span></div>  
-<div class="stat"><strong id="statAqeedahPDF">0</strong><span>Aqeedah PDFs</span></div>  
-<div class="stat"><strong id="statFiqhPDF">0</strong><span>Fiqh PDFs</span></div>  
-<div class="stat"><strong id="statTafseerPDF">0</strong><span>Tafseer PDFs</span></div>  
-<div class="stat"><strong id="statQuiz">0</strong><span>Total Quizzes</span></div>  
-<div class="stat"><strong id="statPublished">0</strong><span>Published</span></div>  
-<div class="stat"><strong id="statDraft">0</strong><span>Drafts</span></div>  
-</div>  
-</section>  <section id="courseTab" class="card tabSection hidden">  
-<h2>Course Books / PDFs</h2>  
-<div id="resourceList">Loading PDFs...</div>  
-<div id="pdfAdminBox" class="hidden">  
-<h3>Upload PDF (Admin)</h3>  
-<input id="pdfTitle" placeholder="PDF title">  
-<select id="pdfSubject">  
-<option value="Aqeedah">Aqeedah</option>  
-<option value="Fiqh">Fiqh</option>  
-<option value="Tafseer">Tafseer</option>  
-<option value="Other">Other</option>  
-</select>  
-<input id="pdfFile" type="file" accept="application/pdf">  
-<button class="gold" onclick="uploadPDF()">Upload PDF</button>  
-</div>  
-</section>  <section id="classTab" class="card tabSection hidden">  
-<h2>Class Schedule</h2>  
-<div id="classList">Loading classes...</div>  
-<div id="classAdminBox" class="hidden">  
-<h3>Add New Class</h3>  
-<input id="classTitle" placeholder="Class title">  
-<select id="classSubject">  
-<option value="Aqeedah">Aqeedah</option>  
-<option value="Fiqh">Fiqh</option>  
-<option value="Tafseer">Tafseer</option>  
-</select>  
-<label>Class Date</label>  
-<input id="classDate" type="date">  
-<label>Start Time</label>  
-<input id="classTime" type="time">  
-<input id="classTeacher" placeholder="Teacher name">  
-<input id="classLink" type="url" placeholder="Zoom meeting link">  
-<button class="gold" onclick="addClass()">Save Class</button>  
-</div>  
-</section>  <section id="quizTab" class="card tabSection hidden">  
-<h2>Weekly Quizzes</h2>  
-<div id="quizList">Loading quizzes...</div>  
-<div id="takeQuizBox" class="hidden"></div>  
-<div id="quizAdminBox" class="hidden">  
-<h3>Create Quiz</h3>  
-<input id="quizTitle" placeholder="Quiz title">  
-<select id="quizSubject">  
-<option value="Aqeedah">Aqeedah</option>  
-<option value="Fiqh">Fiqh</option>  
-<option value="Tafseer">Tafseer</option>  
-</select>  
-<label>Quiz Available Until (optional)</label>  
-<input id="quizUntil" type="datetime-local">  
-<button class="gold" onclick="createQuiz()">Create Draft Quiz</button>  
-<h3>Select Draft Quiz</h3>  
-<select id="draftQuizSelect" onchange="selectDraftQuiz()">  
-<option value="">Select a draft quiz</option>  
-</select>  
-<div id="questionEditor" class="hidden">  
-<h3>Add MCQ Question</h3>  
-<textarea id="newQuestion" placeholder="Write question"></textarea>  
-<input id="optionA" placeholder="Option A">  
-<input id="optionB" placeholder="Option B">  
-<input id="optionC" placeholder="Option C">  
-<input id="optionD" placeholder="Option D">  
-<label>Correct Option</label>  
-<select id="correctOption">  
-<option value="0">Option A</option>  
-<option value="1">Option B</option>  
-<option value="2">Option C</option>  
-<option value="3">Option D</option>  
-</select>  
-<button onclick="addQuestion()">Add Question</button>  
-<div id="addedQuestionList"></div>  
-<button class="green" onclick="publishQuiz()">Publish Quiz</button>  
-</div>  
-</div>  
-</section>  <section id="resultTab" class="card tabSection hidden">  
-<h2>My Quiz Results</h2>  
-<div id="resultList">Loading results...</div>  
-</section>  <section id="attendanceTab" class="card tabSection hidden">  
-<h2>My Attendance</h2>  
-<div id="attendanceList">Loading attendance...</div>  
-</section>  <section id="adminTab" class="card tabSection hidden">  
-<h2>Admin Panel</h2>  
-<h3>Student Quiz Reports</h3>  
-<div id="adminResultList">Loading reports...</div>  
-</section>  
-</section>  
-</main>  <script>  
-const SUPABASE_URL="https://wcbeidolajiqxrwpjhze.supabase.co";  
-const SUPABASE_KEY="sb_publishable_6XuyNg8XOIEd2UmjLIG7Yw_4ohvWgNC";  
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);  
-const BUCKET="Darul_huda_lil_nisa";  
-  
-let currentUser=null;  
-let currentProfile=null;  
-let currentQuiz=null;  
-let selectedDraftQuiz=null;  
-let quizQuestions=[];  
-let passwordRecoveryMode=false; 
-  function togglePassword(id,btn){
-const field=document.getElementById(id);
-if(field.type==="password"){
-field.type="text";
-btn.textContent="🙈";
-}else{
-field.type="password";
-btn.textContent="👁";
+<button onclick="login()">Login</button>
+<button class="light" onclick="showRegister()">New Student Registration</button>
+<button class="light" onclick="showForgot()">Forgot Password?</button>
+</section>
+
+<section id="registerSection" class="card hidden">
+<h2>New Student Registration</h2>
+<div id="registerMessage" class="message hidden"></div>
+<label>Student Name</label>
+<input id="regName" placeholder="Full name">
+<label>Email</label>
+<input id="regEmail" type="email" placeholder="Email" dir="ltr">
+<label>Password</label>
+<input id="regPassword" type="password" placeholder="Create password" dir="ltr">
+<button class="gold" onclick="registerStudent()">Apply / Register</button>
+<button class="light" onclick="backToLogin()">Back to Login</button>
+</section>
+
+<section id="forgotSection" class="card hidden">
+<h2>Forgot Password</h2>
+<p>Apna registered email address likhiye.</p>
+<div id="forgotMessage" class="message hidden"></div>
+<input id="forgotEmail" type="email" placeholder="Registered email" dir="ltr">
+<button class="gold" onclick="forgotPassword()">Send Reset Link</button>
+<button class="light" onclick="backToLogin()">Back to Login</button>
+</section>
+
+<section id="resetSection" class="card hidden">
+<h2>Set New Password</h2>
+<div id="resetMessage" class="message hidden"></div>
+<label>New Password</label>
+<input id="newPassword" type="password" placeholder="New password" dir="ltr">
+<label>Confirm Password</label>
+<input id="confirmPassword" type="password" placeholder="Confirm password" dir="ltr">
+<button class="gold" onclick="updatePassword()">Update Password</button>
+</section>
+
+<section id="dashboard" class="hidden">
+<div class="card">
+<h2 id="welcomeName">Welcome</h2>
+<p id="userRole"></p>
+<button class="red" onclick="logout()">Logout</button>
+</div>
+
+<nav>
+<button onclick="showTab('homeTab')">Home</button>
+<button onclick="showTab('courseTab')">Courses / PDFs</button>
+<button onclick="showTab('classTab')">Classes</button>
+<button onclick="showTab('quizTab')">Quizzes</button>
+<button onclick="showTab('resultTab')">My Results</button>
+<button onclick="showTab('attendanceTab')">Attendance</button>
+<button id="adminNav" class="gold hidden" onclick="showTab('adminTab')">Admin Panel</button>
+</nav>
+
+<section id="homeTab" class="card tabSection">
+<h2>Dashboard Overview</h2>
+<div class="stats">
+<div class="stat"><strong id="statPDF">0</strong><span>All PDFs</span></div>
+<div class="stat"><strong id="statAqeedahPDF">0</strong><span>Aqeedah PDFs</span></div>
+<div class="stat"><strong id="statFiqhPDF">0</strong><span>Fiqh PDFs</span></div>
+<div class="stat"><strong id="statTafseerPDF">0</strong><span>Tafseer PDFs</span></div>
+<div class="stat"><strong id="statQuiz">0</strong><span>Total Quizzes</span></div>
+<div class="stat"><strong id="statPublished">0</strong><span>Published</span></div>
+<div class="stat"><strong id="statDraft">0</strong><span>Drafts</span></div>
+</div>
+</section>
+
+<section id="courseTab" class="card tabSection hidden">
+<h2>Course Books / PDFs</h2>
+<div id="resourceList">Loading PDFs...</div>
+<div id="pdfAdminBox" class="hidden">
+<h3>Upload PDF (Admin)</h3>
+<input id="pdfTitle" placeholder="PDF title">
+<select id="pdfSubject">
+<option value="Aqeedah">Aqeedah</option>
+<option value="Fiqh">Fiqh</option>
+<option value="Tafseer">Tafseer</option>
+<option value="Other">Other</option>
+</select>
+<input id="pdfFile" type="file" accept="application/pdf">
+<button class="gold" onclick="uploadPDF()">Upload PDF</button>
+</div>
+</section>
+
+<section id="classTab" class="card tabSection hidden">
+<h2>Class Schedule</h2>
+<div id="classList">Loading classes...</div>
+<div id="classAdminBox" class="hidden">
+<h3>Add New Class</h3>
+<input id="classTitle" placeholder="Class title">
+<select id="classSubject">
+<option value="Aqeedah">Aqeedah</option>
+<option value="Fiqh">Fiqh</option>
+<option value="Tafseer">Tafseer</option>
+</select>
+<label>Class Date</label>
+<input id="classDate" type="date">
+<label>Start Time</label>
+<input id="classTime" type="time">
+<input id="classTeacher" placeholder="Teacher name">
+<input id="classLink" type="url" placeholder="Meeting link">
+<button class="gold" onclick="addClass()">Save Class</button>
+</div>
+</section>
+
+<section id="quizTab" class="card tabSection hidden">
+<h2>Weekly Quizzes</h2>
+<div id="quizList">Loading quizzes...</div>
+<div id="takeQuizBox" class="hidden"></div>
+<div id="quizAdminBox" class="hidden">
+<h3>Create Quiz</h3>
+<input id="quizTitle" placeholder="Quiz title">
+<select id="quizSubject">
+<option value="Aqeedah">Aqeedah</option>
+<option value="Fiqh">Fiqh</option>
+<option value="Tafseer">Tafseer</option>
+</select>
+<label>Quiz Available Until (optional)</label>
+<input id="quizUntil" type="datetime-local">
+<button class="gold" onclick="createQuiz()">Create Draft Quiz</button>
+<h3>Select Draft Quiz</h3>
+<select id="draftQuizSelect" onchange="selectDraftQuiz()">
+<option value="">Select a draft quiz</option>
+</select>
+<div id="questionEditor" class="hidden">
+<h3>Add MCQ Question</h3>
+<textarea id="newQuestion" placeholder="Write question"></textarea>
+<input id="optionA" placeholder="Option A">
+<input id="optionB" placeholder="Option B">
+<input id="optionC" placeholder="Option C">
+<input id="optionD" placeholder="Option D">
+<label>Correct Option</label>
+<select id="correctOption">
+<option value="0">Option A</option>
+<option value="1">Option B</option>
+<option value="2">Option C</option>
+<option value="3">Option D</option>
+</select>
+<button onclick="addQuestion()">Add Question</button>
+<div id="addedQuestionList"></div>
+<button class="green" onclick="publishQuiz()">Publish Quiz</button>
+</div>
+</div>
+</section>
+
+<section id="resultTab" class="card tabSection hidden">
+<h2>My Quiz Results</h2>
+<div id="resultList">Loading results...</div>
+</section>
+
+<section id="attendanceTab" class="card tabSection hidden">
+<h2>My Attendance</h2>
+<div id="attendanceList">Loading attendance...</div>
+</section>
+
+<section id="adminTab" class="card tabSection hidden">
+<h2>Admin Panel</h2>
+<div id="adminResultList">Loading reports...</div>
+</section>
+</section>
+</main>
+
+<script>
+/* SUPABASE CONFIGURATION */
+
+const SUPABASE_URL="https://wcbeidolajiqxrwpjhze.supabase.co";
+const SUPABASE_KEY="sb_publishable_6XuyNg8XOIEd2UmjLIG7Yw_4ohvWgNC";
+
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const BUCKET="Darul_huda_lil_nisa";
+
+let currentUser=null;
+let currentProfile=null;
+let currentQuiz=null;
+let selectedDraftQuiz=null;
+let quizQuestions=[];
+let passwordRecoveryMode=false;
+
+
+/* COMMON FUNCTIONS */
+
+function message(text,id="authMessage"){
+const box=document.getElementById(id);
+if(!box)return;
+box.textContent=text;
+box.classList.remove("hidden");
 }
-  }
-  
-function message(text,id="authMessage"){  
-const box=document.getElementById(id);  
-if(!box)return;  
-box.textContent=text;  
-box.classList.remove("hidden");  
-}  
-function clearMessage(id="authMessage"){  
-const box=document.getElementById(id);  
-if(box)box.classList.add("hidden");  
-}  
-function backToLogin(){  
-["registerSection","forgotSection","resetSection"].forEach(id=>document.getElementById(id).classList.add("hidden"));  
-document.getElementById("authSection").classList.remove("hidden");  
-}  
-function showRegister(){  
-document.getElementById("authSection").classList.add("hidden");  
-document.getElementById("registerSection").classList.remove("hidden");  
-}  
-function showForgot(){  
-document.getElementById("authSection").classList.add("hidden");  
-document.getElementById("forgotSection").classList.remove("hidden");  
-document.getElementById("forgotEmail").value=document.getElementById("loginEmail").value;  
-}  
-function showTab(id){  
-document.querySelectorAll(".tabSection").forEach(x=>x.classList.add("hidden"));  
-document.getElementById(id).classList.remove("hidden");  
-if(id==="courseTab")loadResources();  
-if(id==="classTab")loadClasses();  
-if(id==="quizTab")loadQuizzes();  
-if(id==="resultTab")loadResults();  
-if(id==="attendanceTab")loadAttendance();  
-if(id==="adminTab")loadAdminResults();  
-}  
-async function login(){  
-clearMessage();  
-const email=document.getElementById("loginEmail").value.trim();  
-const password=document.getElementById("loginPassword").value;  
-if(!email||!password)return message("Email aur password likhiye.");  
-const {data,error}=await db.auth.signInWithPassword({email,password});  
-if(error)return message("Login error: "+error.message);  
-await loadDashboard();  
-}  
-async function registerStudent(){  
-const name=document.getElementById("regName").value.trim();  
-const email=document.getElementById("regEmail").value.trim();  
-const password=document.getElementById("regPassword").value;  
-if(!name||!email||!password)return message("Name, email aur password bharna zaroori hai.","registerMessage");  
-if(password.length<6)return message("Password kam az kam 6 characters ka ho.","registerMessage");  
-const {error}=await db.auth.signUp({  
-email,password,  
-options:{data:{full_name:name}}  
-});  
-if(error)return message("Registration error: "+error.message,"registerMessage");  
-message("Registration request submit ho gayi. Email verification ki zaroorat ho sakti hai.","registerMessage");  
-}  
-async function forgotPassword(){  
-const email=document.getElementById("forgotEmail").value.trim();  
-if(!email)return message("Registered email likhiye.");  
-const redirectTo=window.location.origin+window.location.pathname;  
-const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo});  
-if(error)return message("Reset email error: "+error.message);  
-message("Password reset link email par bhej diya gaya hai.");  
-}  
-async function updatePassword(){  
-const password=document.getElementById("newPassword").value;  
-const confirm=document.getElementById("confirmPassword").value;  
-if(!password||password.length<6)return message("Password kam az kam 6 characters ka ho.");  
-if(password!==confirm)return message("Dono passwords match nahi kar rahe.");  
-const {error}=await db.auth.updateUser({password});  
-if(error)return message("Password update error: "+error.message);  
-message("Password update ho gaya. Ab naye password se login karein.");  
-await db.auth.signOut();  
-passwordRecoveryMode=false;  
-backToLogin();  
-}  
-async function logout(){  
-await db.auth.signOut();  
-currentUser=null;  
-currentProfile=null;  
-document.getElementById("dashboard").classList.add("hidden");  
-document.getElementById("authSection").classList.remove("hidden");  
-}  
-async function loadDashboard(){  
-const {data:{user},error}=await db.auth.getUser();  
-if(error||!user)return;  
-currentUser=user;  
-const {data:profile,error:profileError}=await db.from("profiles")  
-.select("*").eq("id",user.id).maybeSingle();  
-if(profileError)return message("Profile error: "+profileError.message);  
-if(!profile)return message("Profile record nahi mila. Admin se rabta karein.");  
-currentProfile=profile;  
-document.getElementById("authSection").classList.add("hidden");  
-document.getElementById("registerSection").classList.add("hidden");  
-document.getElementById("forgotSection").classList.add("hidden");  
-document.getElementById("resetSection").classList.add("hidden");  
-document.getElementById("dashboard").classList.remove("hidden");  
-document.getElementById("welcomeName").textContent="Welcome, "+(profile.full_name||user.email);  
-document.getElementById("userRole").textContent=profile.role==="admin"?"Administrator":"Student";  
-const admin=profile.role==="admin";  
-document.getElementById("adminNav").classList.toggle("hidden",!admin);  
-document.getElementById("pdfAdminBox").classList.toggle("hidden",!admin);  
-document.getElementById("classAdminBox").classList.toggle("hidden",!admin);  
-document.getElementById("quizAdminBox").classList.toggle("hidden",!admin);  
-showTab("homeTab");  
-await refreshAdminStats();  
-}  
-async function loadResources(){  
-const box=document.getElementById("resourceList");  
-const {data,error}=await db.from("course_resources").select("*").order("created_at",{ascending:false});  
-if(error){box.textContent="PDF load error: "+error.message;return;}  
-box.innerHTML="";  
-if(!data?.length){box.textContent="Abhi koi PDF upload nahi hui.";return;}  
-data.forEach(item=>{  
-const div=document.createElement("div");  
-div.className="item";  
-const h=document.createElement("h3");  
-h.textContent=item.title;  
-const p=document.createElement("p");  
-p.textContent=item.subject||"";  
-const a=document.createElement("a");  
-a.href=item.file_url;  
-a.target="_blank";  
-a.rel="noopener";  
-a.textContent="Open PDF";  
-div.append(h,p,a);  
-if(currentProfile?.role==="admin"){  
-const del=document.createElement("button");  
-del.className="red";  
-del.textContent="Delete";  
-del.onclick=()=>deletePDF(item);  
-div.appendChild(del);  
-}  
-box.appendChild(div);  
-});  
-}  
-async function uploadPDF(){  
-const title=document.getElementById("pdfTitle").value.trim();  
-const subject=document.getElementById("pdfSubject").value;  
-const file=document.getElementById("pdfFile").files[0];  
-if(!title||!file)return message("PDF title aur file select karein.");  
-const path=Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");  
-const {error:uploadError}=await db.storage.from(BUCKET).upload(path,file);  
-if(uploadError)return message("Upload error: "+uploadError.message);  
-const {data:urlData}=db.storage.from(BUCKET).getPublicUrl(path);  
-const {error}=await db.from("course_resources").insert({  
-title,subject,file_url:urlData.publicUrl  
-});  
-if(error)return message("PDF record error: "+error.message);  
-document.getElementById("pdfTitle").value="";  
-document.getElementById("pdfFile").value="";  
-message("PDF upload ho gayi.");  
-await loadResources();  
-await refreshAdminStats();  
-}  
-async function deletePDF(item){  
-if(!confirm("Kya aap is PDF ko delete karna chahti hain?"))return;  
-const {error}=await db.from("course_resources").delete().eq("id",item.id);  
-if(error)return message(error.message);  
-await loadResources();  
-await refreshAdminStats();  
-message("PDF record delete ho gaya.");  
-}  
-async function refreshAdminStats(){  
-const {data:pdfs,error:pdfError}=await db.from("course_resources").select("subject");  
-const {data:quizzes,error:quizError}=await db.from("quizzes").select("is_published");  
-if(pdfError||quizError)return;  
-const all=pdfs||[];  
-document.getElementById("statPDF").textContent=all.length;  
-document.getElementById("statAqeedahPDF").textContent=all.filter(x=>x.subject==="Aqeedah").length;  
-document.getElementById("statFiqhPDF").textContent=all.filter(x=>x.subject==="Fiqh").length;  
-document.getElementById("statTafseerPDF").textContent=all.filter(x=>x.subject==="Tafseer").length;  
-const q=quizzes||[];  
-document.getElementById("statQuiz").textContent=q.length;  
-document.getElementById("statPublished").textContent=q.filter(x=>x.is_published).length;  
-document.getElementById("statDraft").textContent=q.filter(x=>!x.is_published).length;  
-}  
-async function loadClasses(){  
-const box=document.getElementById("classList");  
-const {data,error}=await db.from("class_sections").select("*").order("class_date",{ascending:true});  
-if(error){box.textContent="Class load error: "+error.message;return;}  
-box.innerHTML="";  
-if(!data?.length){box.textContent="Abhi koi class schedule nahi hai.";return;}  
-data.forEach(c=>{  
-const div=document.createElement("div");  
-div.className="item";  
-const h=document.createElement("h3");  
-h.textContent=c.class_title;  
-const p=document.createElement("p");  
-p.textContent=(c.subject||"")+" | "+(c.class_date||"")+" | "+(c.start_time||"");  
-const t=document.createElement("p");  
-t.textContent="Teacher: "+(c.teacher||"");  
-div.append(h,p,t);  
-if(c.class_link){  
-const a=document.createElement("a");  
-a.href=c.class_link;  
-a.target="_blank";  
-a.rel="noopener";  
-a.textContent="Join Class";  
-div.appendChild(a);  
-}  
-box.appendChild(div);  
-});  
-}  
-async function addClass(){  
-const title=document.getElementById("classTitle").value.trim();  
-const subject=document.getElementById("classSubject").value;  
-const date=document.getElementById("classDate").value;  
-const time=document.getElementById("classTime").value;  
-const teacher=document.getElementById("classTeacher").value.trim();  
-const link=document.getElementById("classLink").value.trim();  
-if(!title||!date||!time)return message("Class title, date aur time zaroori hain.");  
-const {error}=await db.from("class_sections").insert({  
-class_title:title,subject,class_date:date,start_time:time,  
-teacher,class_link:link  
-});  
-if(error)return message("Class save error: "+error.message);  
-message("Class save ho gayi.");  
-await loadClasses();  
-}  
-  /* QUIZZES */
+
+function clearMessage(id="authMessage"){
+const box=document.getElementById(id);
+if(box)box.classList.add("hidden");
+}
+
+function togglePassword(id,btn){
+const field=document.getElementById(id);
+field.type=field.type==="password"?"text":"password";
+btn.textContent=field.type==="password"?"👁":"🙈";
+}
+
+function backToLogin(){
+["registerSection","forgotSection","resetSection"].forEach(id=>{
+document.getElementById(id).classList.add("hidden");
+});
+document.getElementById("authSection").classList.remove("hidden");
+}
+
+function showRegister(){
+document.getElementById("authSection").classList.add("hidden");
+document.getElementById("registerSection").classList.remove("hidden");
+}
+
+function showForgot(){
+document.getElementById("authSection").classList.add("hidden");
+document.getElementById("forgotSection").classList.remove("hidden");
+document.getElementById("forgotEmail").value=
+document.getElementById("loginEmail").value;
+}
+
+function showTab(id){
+document.querySelectorAll(".tabSection").forEach(el=>el.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+
+if(id==="courseTab")loadResources();
+if(id==="classTab")loadClasses();
+if(id==="quizTab")loadQuizzes();
+if(id==="resultTab")loadResults();
+if(id==="attendanceTab")loadAttendance();
+if(id==="adminTab")loadAdminResults();
+}
+
+
+/* LOGIN AND REGISTRATION */
+
+async function login(){
+clearMessage();
+const email=document.getElementById("loginEmail").value.trim();
+const password=document.getElementById("loginPassword").value;
+
+if(!email||!password)return message("Email aur password likhiye.");
+
+const {data,error}=await db.auth.signInWithPassword({email,password});
+if(error)return message("Login error: "+error.message);
+
+await loadDashboard();
+}
+
+async function registerStudent(){
+const name=document.getElementById("regName").value.trim();
+const email=document.getElementById("regEmail").value.trim();
+const password=document.getElementById("regPassword").value;
+
+if(!name||!email||!password)
+return message("Tamam details bhar dijiye.","registerMessage");
+
+if(password.length<6)
+return message("Password kam az kam 6 characters ka ho.","registerMessage");
+
+const {error}=await db.auth.signUp({
+email,
+password,
+options:{data:{full_name:name}}
+});
+
+if(error)return message("Registration error: "+error.message,"registerMessage");
+
+message("Registration submit ho gayi. Email verification ki zaroorat ho sakti hai.","registerMessage");
+}
+
+
+/* FORGOT PASSWORD */
+
+async function forgotPassword(){
+const email=document.getElementById("forgotEmail").value.trim();
+
+if(!email)return message("Registered email likhiye.","forgotMessage");
+
+const redirectTo=window.location.origin+window.location.pathname;
+
+const {error}=await db.auth.resetPasswordForEmail(email,{
+redirectTo:redirectTo
+});
+
+if(error)return message("Reset email error: "+error.message,"forgotMessage");
+
+message("Password reset link email par bhej diya gaya hai. Email mein sabse naya link kholiye.","forgotMessage");
+}
+
+function showPasswordReset(){
+passwordRecoveryMode=true;
+
+["authSection","registerSection","forgotSection","dashboard"].forEach(id=>{
+document.getElementById(id).classList.add("hidden");
+});
+
+document.getElementById("resetSection").classList.remove("hidden");
+clearMessage("resetMessage");
+}
+
+async function updatePassword(){
+const password=document.getElementById("newPassword").value;
+const confirm=document.getElementById("confirmPassword").value;
+
+if(!password||password.length<6)
+return message("Password kam az kam 6 characters ka ho.","resetMessage");
+
+if(password!==confirm)
+return message("Dono passwords match nahi kar rahe.","resetMessage");
+
+const {error}=await db.auth.updateUser({password:password});
+
+if(error)return message("Password update error: "+error.message,"resetMessage");
+
+passwordRecoveryMode=false;
+await db.auth.signOut();
+
+document.getElementById("newPassword").value="";
+document.getElementById("confirmPassword").value="";
+
+backToLogin();
+message("Password update ho gaya. Ab naye password se login karein.");
+}
+
+
+/* SESSION AND DASHBOARD */
+
+async function logout(){
+await db.auth.signOut();
+currentUser=null;
+currentProfile=null;
+document.getElementById("dashboard").classList.add("hidden");
+document.getElementById("authSection").classList.remove("hidden");
+}
+
+async function loadDashboard(){
+const {data:{user},error}=await db.auth.getUser();
+if(error||!user)return;
+
+currentUser=user;
+
+const {data:profile,error:profileError}=await db.from("profiles")
+.select("*").eq("id",user.id).maybeSingle();
+
+if(profileError)return message("Profile error: "+profileError.message);
+if(!profile)return message("Profile record nahi mila. Admin se rabta karein.");
+
+currentProfile=profile;
+
+["authSection","registerSection","forgotSection","resetSection"].forEach(id=>{
+document.getElementById(id).classList.add("hidden");
+});
+
+document.getElementById("dashboard").classList.remove("hidden");
+
+document.getElementById("welcomeName").textContent=
+"Welcome, "+(profile.full_name||user.email);
+
+document.getElementById("userRole").textContent=
+profile.role==="admin"?"Administrator":"Student";
+
+const admin=profile.role==="admin";
+
+document.getElementById("adminNav").classList.toggle("hidden",!admin);
+document.getElementById("pdfAdminBox").classList.toggle("hidden",!admin);
+document.getElementById("classAdminBox").classList.toggle("hidden",!admin);
+document.getElementById("quizAdminBox").classList.toggle("hidden",!admin);
+
+showTab("homeTab");
+await loadStats();
+}
+
+
+/* COURSE PDFS */
+
+async function loadResources(){
+const box=document.getElementById("resourceList");
+box.textContent="Loading PDFs...";
+
+const {data,error}=await db.from("resources")
+.select("*").order("created_at",{ascending:false});
+
+if(error){
+box.textContent="PDF loading error: "+error.message;
+return;
+}
+
+box.innerHTML="";
+
+if(!data||!data.length){
+box.textContent="Abhi koi PDF upload nahi hui.";
+return;
+}
+
+data.forEach(item=>{
+const div=document.createElement("div");
+div.className="item";
+
+const title=document.createElement("h3");
+title.textContent=item.title||"Course PDF";
+
+const subject=document.createElement("p");
+subject.textContent="Subject: "+(item.subject||"");
+
+const link=document.createElement("a");
+link.href=item.file_url;
+link.target="_blank";
+link.rel="noopener";
+link.textContent="Open PDF";
+
+div.append(title,subject,link);
+
+if(currentProfile?.role==="admin"){
+const del=document.createElement("button");
+del.className="red";
+del.textContent="Delete PDF";
+del.onclick=()=>deletePDF(item);
+div.appendChild(del);
+}
+
+box.appendChild(div);
+});
+}
+
+async function uploadPDF(){
+const title=document.getElementById("pdfTitle").value.trim();
+const subject=document.getElementById("pdfSubject").value;
+const file=document.getElementById("pdfFile").files[0];
+
+if(!title||!file)return alert("PDF title aur file select karein.");
+if(file.type!=="application/pdf")return alert("Sirf PDF file upload karein.");
+
+const path=Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+
+const {error:uploadError}=await db.storage.from(BUCKET).upload(path,file);
+
+if(uploadError)return alert("Upload error: "+uploadError.message);
+
+const {data:urlData}=db.storage.from(BUCKET).getPublicUrl(path);
+
+const {error}=await db.from("resources").insert({
+title,
+subject,
+file_url:urlData.publicUrl,
+storage_path:path
+});
+
+if(error)return alert("Database error: "+error.message);
+
+document.getElementById("pdfTitle").value="";
+document.getElementById("pdfFile").value="";
+
+await loadResources();
+await loadStats();
+alert("PDF upload ho gayi.");
+}
+
+async function deletePDF(item){
+if(!confirm("Kya aap is PDF ko delete karna chahti hain?"))return;
+
+if(item.storage_path){
+await db.storage.from(BUCKET).remove([item.storage_path]);
+}
+
+const {error}=await db.from("resources").delete().eq("id",item.id);
+
+if(error)return alert(error.message);
+
+await loadResources();
+await loadStats();
+}
+
+
+/* CLASSES */
+
+async function loadClasses(){
+const box=document.getElementById("classList");
+box.textContent="Loading classes...";
+
+const {data,error}=await db.from("classes")
+.select("*").order("class_date",{ascending:true});
+
+if(error){
+box.textContent="Class loading error: "+error.message;
+return;
+}
+
+box.innerHTML="";
+
+if(!data||!data.length){
+box.textContent="Abhi koi class schedule nahi hai.";
+return;
+}
+
+data.forEach(item=>{
+const div=document.createElement("div");
+div.className="item";
+
+const h=document.createElement("h3");
+h.textContent=item.title;
+
+const p=document.createElement("p");
+p.textContent="Subject: "+item.subject+
+" | Date: "+item.class_date+
+" | Time: "+item.class_time+
+" | Teacher: "+item.teacher;
+
+div.append(h,p);
+
+if(item.meeting_link){
+const a=document.createElement("a");
+a.href=item.meeting_link;
+a.target="_blank";
+a.rel="noopener";
+a.textContent="Join Class";
+div.appendChild(a);
+}
+
+if(currentProfile?.role==="admin"){
+const b=document.createElement("button");
+b.className="red";
+b.textContent="Delete";
+b.onclick=()=>deleteClass(item.id);
+div.appendChild(b);
+}
+
+box.appendChild(div);
+});
+}
+
+async function addClass(){
+const title=document.getElementById("classTitle").value.trim();
+const subject=document.getElementById("classSubject").value;
+const date=document.getElementById("classDate").value;
+const time=document.getElementById("classTime").value;
+const teacher=document.getElementById("classTeacher").value.trim();
+const link=document.getElementById("classLink").value.trim();
+
+if(!title||!date||!time)
+return alert("Class title, date aur time zaroori hain.");
+
+const {error}=await db.from("classes").insert({
+title,
+subject,
+class_date:date,
+class_time:time,
+teacher,
+meeting_link:link
+});
+
+if(error)return alert(error.message);
+
+await loadClasses();
+alert("Class save ho gayi.");
+}
+
+async function deleteClass(id){
+if(!confirm("Class delete karein?"))return;
+
+const {error}=await db.from("classes").delete().eq("id",id);
+if(error)return alert(error.message);
+
+loadClasses();
+}
+
+
+/* QUIZZES */
 
 async function loadQuizzes(){
 const box=document.getElementById("quizList");
-const {data,error}=await db.from("quizzes").select("*")
-.eq("is_published",true).order("created_at",{ascending:false});
+box.textContent="Loading quizzes...";
 
-if(error){box.textContent=error.message;return;}
+const {data,error}=await db.from("quizzes")
+.select("*").order("created_at",{ascending:false});
+
+if(error){
+box.textContent="Quiz loading error: "+error.message;
+return;
+}
+
 box.innerHTML="";
 
-if(!data?.length){
-box.textContent="Abhi published quiz nahi hai.";
-}else{
+if(!data||!data.length){
+box.textContent="Abhi koi quiz available nahi.";
+return;
+}
+
 data.forEach(q=>{
 const div=document.createElement("div");
 div.className="item";
@@ -452,35 +729,28 @@ const h=document.createElement("h3");
 h.textContent=q.title;
 
 const p=document.createElement("p");
-p.textContent=q.subject||"";
+p.textContent=q.subject+" | "+q.status;
 
+div.append(h,p);
+
+if(q.status==="published"){
 const b=document.createElement("button");
 b.textContent="Start Quiz";
 b.onclick=()=>startQuiz(q);
+div.appendChild(b);
+}
 
-div.append(h,p,b);
+if(currentProfile?.role==="admin"&&q.status==="draft"){
+const b=document.createElement("button");
+b.textContent="Edit Draft";
+b.onclick=()=>openDraft(q);
+div.appendChild(b);
+}
+
 box.appendChild(div);
 });
-}
 
-if(currentProfile?.role==="admin")await loadDraftQuizzes();
-}
-
-async function loadDraftQuizzes(){
-const select=document.getElementById("draftQuizSelect");
-const {data,error}=await db.from("quizzes").select("*")
-.eq("is_published",false).order("created_at",{ascending:false});
-
-if(error)return message(error.message);
-
-select.innerHTML='<option value="">Select a draft quiz</option>';
-
-(data||[]).forEach(q=>{
-const op=document.createElement("option");
-op.value=q.id;
-op.textContent=q.title+" - "+q.subject;
-select.appendChild(op);
-});
+if(currentProfile?.role==="admin")loadDraftOptions(data);
 }
 
 async function createQuiz(){
@@ -488,199 +758,169 @@ const title=document.getElementById("quizTitle").value.trim();
 const subject=document.getElementById("quizSubject").value;
 const until=document.getElementById("quizUntil").value;
 
-if(!title)return message("Quiz title likhiye.");
+if(!title)return alert("Quiz title likhiye.");
 
 const {data,error}=await db.from("quizzes").insert({
 title,
 subject,
-available_until:until||null,
-is_published:false
+status:"draft",
+available_until:until||null
 }).select().single();
 
-if(error)return message("Quiz create error: "+error.message);
+if(error)return alert(error.message);
 
-selectedDraftQuiz=data;
 document.getElementById("quizTitle").value="";
-document.getElementById("questionEditor").classList.remove("hidden");
+await loadQuizzes();
+await loadStats();
+openDraft(data);
+}
 
-await loadDraftQuizzes();
-document.getElementById("draftQuizSelect").value=data.id;
-await showDraftQuestions();
-await refreshAdminStats();
+function loadDraftOptions(data){
+const select=document.getElementById("draftQuizSelect");
+select.innerHTML='<option value="">Select a draft quiz</option>';
 
-message("Draft quiz create ho gaya.");
+data.filter(q=>q.status==="draft").forEach(q=>{
+const option=document.createElement("option");
+option.value=q.id;
+option.textContent=q.title;
+select.appendChild(option);
+});
 }
 
 async function selectDraftQuiz(){
 const id=document.getElementById("draftQuizSelect").value;
+if(!id)return;
 
-if(!id){
-selectedDraftQuiz=null;
-document.getElementById("questionEditor").classList.add("hidden");
-return;
+const {data,error}=await db.from("quizzes").select("*").eq("id",id).single();
+if(error)return alert(error.message);
+
+openDraft(data);
 }
 
-const {data,error}=await db.from("quizzes")
-.select("*").eq("id",id).single();
+async function openDraft(q){
+selectedDraftQuiz=q;
+quizQuestions=[];
 
-if(error)return message(error.message);
-
-selectedDraftQuiz=data;
+document.getElementById("draftQuizSelect").value=q.id;
 document.getElementById("questionEditor").classList.remove("hidden");
-await showDraftQuestions();
-}
 
-async function showDraftQuestions(){
-if(!selectedDraftQuiz)return;
-
-const box=document.getElementById("addedQuestionList");
 const {data,error}=await db.from("quiz_questions")
-.select("*").eq("quiz_id",selectedDraftQuiz.id);
+.select("*").eq("quiz_id",q.id).order("created_at");
 
-if(error){box.textContent=error.message;return;}
+if(error)return alert("Questions error: "+error.message);
 
-box.innerHTML="<h3>Added Questions</h3>";
-
-if(!data?.length){
-box.innerHTML+="<p>No questions added yet.</p>";
-return;
+quizQuestions=data||[];
+renderDraftQuestions();
 }
 
-data.forEach((q,i)=>{
-const p=document.createElement("p");
-p.textContent=(i+1)+". "+q.question_text;
-box.appendChild(p);
+function renderDraftQuestions(){
+const box=document.getElementById("addedQuestionList");
+box.innerHTML="";
+
+quizQuestions.forEach((q,i)=>{
+const div=document.createElement("div");
+div.className="item";
+div.textContent=(i+1)+". "+q.question;
+box.appendChild(div);
 });
 }
 
 async function addQuestion(){
-if(!selectedDraftQuiz)return message("Pehle draft quiz select karein.");
+if(!selectedDraftQuiz)return alert("Pehle draft quiz select karein.");
 
 const question=document.getElementById("newQuestion").value.trim();
-
 const options=[
 document.getElementById("optionA").value.trim(),
 document.getElementById("optionB").value.trim(),
 document.getElementById("optionC").value.trim(),
 document.getElementById("optionD").value.trim()
 ];
+const answer=Number(document.getElementById("correctOption").value);
 
-const correct=Number(document.getElementById("correctOption").value);
+if(!question||options.some(x=>!x))
+return alert("Question aur chaaron options likhiye.");
 
-if(!question||options.some(x=>!x)){
-return message("Question aur chaaron options likhiye.");
-}
-
-const {data:q,error}=await db.from("quiz_questions").insert({
+const {data,error}=await db.from("quiz_questions").insert({
 quiz_id:selectedDraftQuiz.id,
-question_text:question
+question,
+options,
+correct_answer:answer
 }).select().single();
 
-if(error)return message("Question error: "+error.message);
+if(error)return alert(error.message);
 
-const optionRows=options.map(option_text=>({
-question_id:q.id,
-option_text
-}));
-
-const {data:inserted,error:optError}=await db.from("quiz_options")
-.insert(optionRows).select();
-
-if(optError)return message("Options error: "+optError.message);
-
-const correctOption=inserted[correct];
-
-const {error:keyError}=await db.from("quiz_answer_key").insert({
-question_id:q.id,
-correct_option_id:correctOption.id
-});
-
-if(keyError)return message("Answer key error: "+keyError.message);
+quizQuestions.push(data);
+renderDraftQuestions();
 
 ["newQuestion","optionA","optionB","optionC","optionD"].forEach(id=>{
 document.getElementById(id).value="";
 });
 
-await showDraftQuestions();
-message("Question add ho gaya.");
+alert("Question add ho gaya.");
 }
 
 async function publishQuiz(){
-if(!selectedDraftQuiz)return message("Draft quiz select karein.");
-
-const {count,error:countError}=await db.from("quiz_questions")
-.select("*",{count:"exact",head:true})
-.eq("quiz_id",selectedDraftQuiz.id);
-
-if(countError)return message(countError.message);
-if(!count)return message("Pehle questions add karein.");
+if(!selectedDraftQuiz)return alert("Draft quiz select karein.");
+if(!quizQuestions.length)return alert("Kam az kam ek question add karein.");
 
 const {error}=await db.from("quizzes")
-.update({is_published:true})
+.update({status:"published"})
 .eq("id",selectedDraftQuiz.id);
 
-if(error)return message("Publish error: "+error.message);
+if(error)return alert(error.message);
 
 selectedDraftQuiz=null;
+quizQuestions=[];
 document.getElementById("questionEditor").classList.add("hidden");
 
-await loadDraftQuizzes();
 await loadQuizzes();
-await refreshAdminStats();
-
-message("Quiz publish ho gaya.");
+await loadStats();
+alert("Quiz publish ho gaya.");
 }
+
 
 /* STUDENT QUIZ */
 
-async function startQuiz(quiz){
-currentQuiz=quiz;
+async function startQuiz(q){
+const {data,error}=await db.from("quiz_questions")
+.select("id,question,options")
+.eq("quiz_id",q.id)
+.order("created_at");
+
+if(error)return alert(error.message);
+if(!data||!data.length)return alert("Is quiz mein questions nahi hain.");
+
+currentQuiz={quiz:q,questions:data,answers:{}};
 
 const box=document.getElementById("takeQuizBox");
 box.innerHTML="";
 box.classList.remove("hidden");
 
-const h=document.createElement("h3");
-h.textContent=quiz.title;
-box.appendChild(h);
+const heading=document.createElement("h3");
+heading.textContent=q.title;
+box.appendChild(heading);
 
-const {data:questions,error}=await db.from("quiz_questions")
-.select("*").eq("quiz_id",quiz.id);
-
-if(error)return message(error.message);
-
-quizQuestions=[];
-
-for(const q of questions||[]){
-const {data:options,error:optError}=await db.from("quiz_options")
-.select("*").eq("question_id",q.id);
-
-if(optError)return message(optError.message);
-
-quizQuestions.push({...q,options:options||[]});
-}
-
-if(!quizQuestions.length)return message("Is quiz mein questions nahi hain.");
-
-quizQuestions.forEach((q,i)=>{
+data.forEach((item,index)=>{
 const div=document.createElement("div");
 div.className="item";
 
-const p=document.createElement("p");
-p.textContent=(i+1)+". "+q.question_text;
-div.appendChild(p);
+const h=document.createElement("h3");
+h.textContent=(index+1)+". "+item.question;
+div.appendChild(h);
 
-q.options.forEach(op=>{
+(item.options||[]).forEach((option,i)=>{
 const label=document.createElement("label");
 label.className="option-label";
 
 const radio=document.createElement("input");
 radio.type="radio";
-radio.name="question_"+q.id;
-radio.value=op.id;
+radio.name="question_"+item.id;
+radio.value=i;
 radio.style.width="auto";
 
-label.append(radio,document.createTextNode(" "+op.option_text));
+radio.onchange=()=>{currentQuiz.answers[item.id]=i;};
+
+label.append(radio,document.createTextNode(" "+option));
 div.appendChild(label);
 });
 
@@ -688,155 +928,156 @@ box.appendChild(div);
 });
 
 const submit=document.createElement("button");
+submit.className="green";
 submit.textContent="Submit Quiz";
 submit.onclick=submitQuiz;
 box.appendChild(submit);
+
+box.scrollIntoView({behavior:"smooth"});
 }
 
 async function submitQuiz(){
 if(!currentQuiz)return;
 
-const answers=[];
+if(Object.keys(currentQuiz.answers).length!==currentQuiz.questions.length)
+return alert("Har question ka jawab select karein.");
 
-for(const q of quizQuestions){
-const selected=document.querySelector(
-'input[name="question_'+q.id+'"]:checked'
-);
-
-if(!selected)return message("Har question ka answer select karein.");
-
-answers.push({
+const answers=currentQuiz.questions.map(q=>({
 question_id:q.id,
-selected_option_id:selected.value
-});
-}
+answer:currentQuiz.answers[q.id]
+}));
 
 const {data,error}=await db.rpc("submit_quiz",{
-p_quiz_id:currentQuiz.id,
+p_quiz_id:currentQuiz.quiz.id,
 p_answers:answers
 });
 
-if(error)return message("Quiz submit error: "+error.message);
+if(error)return alert("Submit error: "+error.message);
 
-const box=document.getElementById("takeQuizBox");
-box.innerHTML="";
+document.getElementById("takeQuizBox").classList.add("hidden");
+currentQuiz=null;
 
-const h=document.createElement("h3");
-h.textContent="Quiz Result";
-const p=document.createElement("p");
-p.textContent="Score: "+data.score+" / "+data.total_questions;
-
-box.append(h,p);
-
+alert("Quiz submit ho gaya. Results section check karein.");
 await loadResults();
 }
 
-/* STUDENT RESULTS */
+
+/* RESULTS */
 
 async function loadResults(){
-if(!currentUser)return;
-
 const box=document.getElementById("resultList");
+box.textContent="Loading results...";
 
-const {data,error}=await db.from("quiz_attempts")
+const {data,error}=await db.from("quiz_results")
 .select("*").eq("student_id",currentUser.id)
-.order("completed_at",{ascending:false});
+.order("created_at",{ascending:false});
 
-if(error){box.textContent=error.message;return;}
-
-box.innerHTML="";
-
-if(!data?.length){
-box.textContent="Abhi koi result nahi hai.";
+if(error){
+box.textContent="Results error: "+error.message;
 return;
 }
 
-for(const a of data){
-const {data:quiz}=await db.from("quizzes")
-.select("title,subject").eq("id",a.quiz_id).maybeSingle();
-
-const div=document.createElement("div");
-div.className="item";
-div.textContent=(quiz?.title||"Quiz")+" | "+
-(quiz?.subject||"")+" | Score: "+a.score;
-
-box.appendChild(div);
-}
-}
-
-/* ADMIN RESULTS */
-
-async function loadAdminResults(){
-if(currentProfile?.role!=="admin")return;
-
-const box=document.getElementById("adminResultList");
-
-const {data,error}=await db.from("quiz_attempts")
-.select("*").order("completed_at",{ascending:false});
-
-if(error){box.textContent=error.message;return;}
-
 box.innerHTML="";
 
-if(!data?.length){
-box.textContent="Abhi quiz attempts nahi hain.";
+if(!data||!data.length){
+box.textContent="Abhi koi result nahi.";
 return;
 }
 
-for(const a of data){
-const {data:student}=await db.from("profiles")
-.select("full_name").eq("id",a.student_id).maybeSingle();
-
-const {data:quiz}=await db.from("quizzes")
-.select("title").eq("id",a.quiz_id).maybeSingle();
-
+data.forEach(r=>{
 const div=document.createElement("div");
 div.className="item";
-div.textContent=(student?.full_name||"Student")+" | "+
-(quiz?.title||"Quiz")+" | Score: "+a.score;
-
+div.textContent="Score: "+r.score+" / "+r.total_questions;
 box.appendChild(div);
+});
 }
-}
+
 
 /* ATTENDANCE */
 
 async function loadAttendance(){
-if(!currentUser)return;
-
 const box=document.getElementById("attendanceList");
+box.textContent="Loading attendance...";
 
 const {data,error}=await db.from("attendance")
 .select("*").eq("student_id",currentUser.id)
 .order("class_date",{ascending:false});
 
-if(error){box.textContent=error.message;return;}
-
-box.innerHTML="";
-
-if(!data?.length){
-box.textContent="Attendance record abhi available nahi hai.";
+if(error){
+box.textContent="Attendance error: "+error.message;
 return;
 }
 
-data.forEach(a=>{
+box.innerHTML="";
+
+if(!data||!data.length){
+box.textContent="Abhi attendance record nahi.";
+return;
+}
+
+data.forEach(item=>{
 const div=document.createElement("div");
 div.className="item";
-div.textContent="Date: "+a.class_date+" | Status: "+a.status;
+div.textContent=(item.class_date||"")+
+" — "+(item.status||"");
 box.appendChild(div);
 });
 }
 
+
+/* ADMIN REPORTS */
+
+async function loadAdminResults(){
+if(currentProfile?.role!=="admin")return;
+
+const box=document.getElementById("adminResultList");
+box.textContent="Loading reports...";
+
+const {data,error}=await db.from("quiz_results")
+.select("*").order("created_at",{ascending:false});
+
+if(error){
+box.textContent="Report error: "+error.message;
+return;
+}
+
+box.innerHTML="";
+
+(data||[]).forEach(r=>{
+const div=document.createElement("div");
+div.className="item";
+div.textContent="Student: "+r.student_id+
+" | Score: "+r.score+"/"+r.total_questions;
+box.appendChild(div);
+});
+}
+
+
+/* DASHBOARD STATISTICS */
+
+async function loadStats(){
+const {data:pdfs}=await db.from("resources").select("subject");
+const {data:quizzes}=await db.from("quizzes").select("status");
+
+const resources=pdfs||[];
+const quizData=quizzes||[];
+
+document.getElementById("statPDF").textContent=resources.length;
+document.getElementById("statAqeedahPDF").textContent=resources.filter(x=>x.subject==="Aqeedah").length;
+document.getElementById("statFiqhPDF").textContent=resources.filter(x=>x.subject==="Fiqh").length;
+document.getElementById("statTafseerPDF").textContent=resources.filter(x=>x.subject==="Tafseer").length;
+document.getElementById("statQuiz").textContent=quizData.length;
+document.getElementById("statPublished").textContent=quizData.filter(x=>x.status==="published").length;
+document.getElementById("statDraft").textContent=quizData.filter(x=>x.status==="draft").length;
+}
+
+
 /* AUTH SESSION */
 
 db.auth.onAuthStateChange((event,session)=>{
-
 if(event==="PASSWORD_RECOVERY"){
-passwordRecoveryMode=true;
-
-document.getElementById("authSection").classList.add("hidden");
-document.getElementById("dashboard").classList.add("hidden");
-document.getElementById("resetSection").classList.remove("hidden");
+showPasswordReset();
+return;
 }
 
 if(event==="SIGNED_IN"&&session&&!passwordRecoveryMode){
@@ -846,7 +1087,6 @@ setTimeout(()=>loadDashboard(),0);
 if(event==="SIGNED_OUT"){
 passwordRecoveryMode=false;
 }
-
 });
 
 (async()=>{
@@ -854,6 +1094,18 @@ const {data,error}=await db.auth.getSession();
 
 if(error){
 console.error(error.message);
+return;
+}
+
+const hashParams=new URLSearchParams(window.location.hash.substring(1));
+const queryParams=new URLSearchParams(window.location.search);
+
+const isRecovery=
+hashParams.get("type")==="recovery"||
+queryParams.get("type")==="recovery";
+
+if(data.session&&isRecovery){
+showPasswordReset();
 return;
 }
 
