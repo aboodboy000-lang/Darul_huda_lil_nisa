@@ -197,7 +197,17 @@ let currentProfile=null;
 let currentQuiz=null;  
 let selectedDraftQuiz=null;  
 let quizQuestions=[];  
-let passwordRecoveryMode=false;  
+let passwordRecoveryMode=false; 
+  function togglePassword(id,btn){
+const field=document.getElementById(id);
+if(field.type==="password"){
+field.type="text";
+btn.textContent="🙈";
+}else{
+field.type="password";
+btn.textContent="👁";
+}
+  }
   
 function message(text,id="authMessage"){  
 const box=document.getElementById(id);  
