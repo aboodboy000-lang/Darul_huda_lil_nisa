@@ -52,7 +52,10 @@ a{color:#9a7024;word-break:break-word}
 <label>Email</label>  
 <input id="loginEmail" type="email" placeholder="Enter your email" dir="ltr">  
 <label>Password</label>  
-<input id="loginPassword" type="password" placeholder="Enter password" dir="ltr">  
+<div class="password-wrap">
+<input id="loginPassword" type="password" placeholder="Enter password" dir="ltr">
+<button type="button" class="eye-btn" onclick="togglePassword('loginPassword',this)">👁</button>
+</div>
 <button onclick="login()">Login</button>  
 <button class="light" onclick="showRegister()">New Student Registration</button>  
 <button class="light" onclick="showForgot()">Forgot Password?</button>  
