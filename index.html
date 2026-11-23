@@ -7,7 +7,10 @@
 <title>Darul Huda lil Nisaa</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--navy:#14243b;--gold:#c49a45;--cream:#f7f4ec;--border:#e5dfd1;--green:#28734e;--red:#b83b3b}
+:root{
+ --navy:#14243b;--gold:#c49a45;--cream:#f7f4ec;
+ --border:#e5dfd1;--green:#28734e;--red:#b83b3b;
+}
 *{box-sizing:border-box}
 body{margin:0;background:var(--cream);color:var(--navy);font-family:Arial,sans-serif}
 header{background:var(--navy);color:white;text-align:center;padding:23px 12px;border-bottom:4px solid var(--gold)}
@@ -17,9 +20,13 @@ main{max-width:1050px;margin:22px auto;padding:0 13px}
 .card{background:white;border:1px solid var(--border);border-radius:13px;padding:18px;margin-bottom:16px;box-shadow:0 3px 12px #14243b0c}
 h2,h3{color:var(--navy)}
 h2{margin-top:0}
-input,select,textarea{width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;margin:7px 0 13px;font-size:15px;background:white}
+input,select,textarea{
+ width:100%;padding:12px;border:1px solid var(--border);
+ border-radius:8px;margin:7px 0 13px;font-size:15px;background:white
+}
 textarea{min-height:75px}
 button{border:0;background:var(--navy);color:white;border-radius:8px;padding:11px 16px;margin:4px;cursor:pointer;font-size:15px}
+button:disabled{opacity:.55;cursor:not-allowed}
 button.gold{background:var(--gold);color:#172238}
 button.green{background:var(--green)}
 button.red{background:var(--red)}
@@ -36,7 +43,7 @@ nav{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:15px}
 .item{border:1px solid var(--border);padding:13px;border-radius:9px;margin:10px 0;overflow-wrap:anywhere}
 .item h3{margin-top:0}
 .questionBox{background:#faf8f2;border:1px solid var(--border);padding:13px;border-radius:9px;margin:12px 0}
-.option{display:flex;align-items:center;gap:8px;margin:8px 0}
+.option{display:flex;align-items:center;gap:8px;margin:10px 0;padding:9px;background:#fff;border:1px solid var(--border);border-radius:8px}
 .option input{width:auto;margin:0}
 .option label{font-weight:normal;margin:0}
 .passwordWrap{display:flex;gap:5px;align-items:center}
@@ -48,9 +55,15 @@ hr{border:0;border-top:1px solid var(--border);margin:15px 0}
 video{width:100%;max-height:420px;background:#111;border-radius:9px}
 .resultCorrect{color:var(--green);font-weight:bold}
 .resultWrong{color:var(--red);font-weight:bold}
+.resultAnswer{background:#e5f4e9;padding:9px;border-radius:7px;margin:7px 0}
+.resultYour{background:#edf1f5;padding:9px;border-radius:7px;margin:7px 0}
+.badge{display:inline-block;padding:5px 9px;border-radius:6px;background:#eee8d9;margin:3px;font-size:13px}
+footer{text-align:center;color:#667;padding:20px;font-size:13px}
 </style>
 </head>
+
 <body>
+
 <header>
 <h1>دار الهدى للنساء</h1>
 <p>DARUL HUDA LIL NISAA</p>
@@ -58,37 +71,48 @@ video{width:100%;max-height:420px;background:#111;border-radius:9px}
 </header>
 
 <main>
+
+<!-- LOGIN -->
 <section id="authSection" class="card">
 <h2>Admin / Student Login</h2>
 <div id="authMessage" class="message hidden"></div>
+
 <label>Email</label>
 <input id="loginEmail" type="email" placeholder="Registered email" dir="ltr">
+
 <label>Password</label>
 <div class="passwordWrap">
 <input id="loginPassword" type="password" placeholder="Password" dir="ltr">
 <button class="light" type="button" onclick="togglePassword('loginPassword',this)">👁</button>
 </div>
-<button onclick="login()">Login</button>
+
+<button id="loginBtn" onclick="login()">Login</button>
 <button class="light" onclick="showSection('registerSection')">New Student Registration</button>
 <button class="light" onclick="showSection('forgotSection')">Forgot Password?</button>
 </section>
 
+<!-- REGISTRATION -->
 <section id="registerSection" class="card hidden">
 <h2>New Student Registration</h2>
 <div id="registerMessage" class="message hidden"></div>
+
 <label>Student Name</label>
 <input id="regName" placeholder="Full name">
+
 <label>Email</label>
 <input id="regEmail" type="email" placeholder="Email" dir="ltr">
+
 <label>Password</label>
 <div class="passwordWrap">
 <input id="regPassword" type="password" placeholder="Create password" dir="ltr">
 <button class="light" type="button" onclick="togglePassword('regPassword',this)">👁</button>
 </div>
-<button class="gold" onclick="registerStudent()">Apply / Register</button>
+
+<button class="gold" id="registerBtn" onclick="registerStudent()">Apply / Register</button>
 <button class="light" onclick="showSection('authSection')">Back to Login</button>
 </section>
 
+<!-- FORGOT PASSWORD -->
 <section id="forgotSection" class="card hidden">
 <h2>Forgot Password</h2>
 <p>Apna registered email address likhiye.</p>
@@ -98,23 +122,29 @@ video{width:100%;max-height:420px;background:#111;border-radius:9px}
 <button class="light" onclick="showSection('authSection')">Back to Login</button>
 </section>
 
+<!-- RESET PASSWORD -->
 <section id="resetSection" class="card hidden">
 <h2>Set New Password</h2>
 <div id="resetMessage" class="message hidden"></div>
+
 <label>New Password</label>
 <div class="passwordWrap">
 <input id="newPassword" type="password" placeholder="New password" dir="ltr">
 <button class="light" type="button" onclick="togglePassword('newPassword',this)">👁</button>
 </div>
+
 <label>Confirm Password</label>
 <div class="passwordWrap">
 <input id="confirmPassword" type="password" placeholder="Confirm password" dir="ltr">
 <button class="light" type="button" onclick="togglePassword('confirmPassword',this)">👁</button>
 </div>
+
 <button class="gold" onclick="updatePassword()">Update Password</button>
 </section>
 
+<!-- DASHBOARD -->
 <section id="dashboard" class="hidden">
+
 <div class="card">
 <h2 id="welcomeName">Welcome</h2>
 <p id="userRole"></p>
@@ -129,6 +159,7 @@ video{width:100%;max-height:420px;background:#111;border-radius:9px}
 <button id="adminNav" class="gold hidden" onclick="showTab('adminTab')">Admin Panel</button>
 </nav>
 
+<!-- HOME -->
 <section id="homeTab" class="card tabSection">
 <h2>Dashboard Overview</h2>
 <div class="stats">
@@ -139,14 +170,18 @@ video{width:100%;max-height:420px;background:#111;border-radius:9px}
 </div>
 </section>
 
+<!-- RESOURCES -->
 <section id="courseTab" class="card tabSection hidden">
 <h2>Course Books / PDFs / Videos</h2>
 <div id="resourceList">Loading resources...</div>
+
 <div id="resourceAdminBox" class="hidden">
 <hr>
 <h3>Upload PDF or Video (Admin)</h3>
+
 <label>Title</label>
 <input id="resourceTitle" placeholder="Resource title">
+
 <label>Subject</label>
 <select id="resourceSubject">
 <option value="Aqeedah">Aqeedah</option>
@@ -154,13 +189,15 @@ video{width:100%;max-height:420px;background:#111;border-radius:9px}
 <option value="Tafseer">Tafseer</option>
 <option value="Other">Other</option>
 </select>
+
 <label>Choose PDF or Video</label>
 <input id="resourceFile" type="file" accept=".pdf,video/*">
+
 <button class="gold" onclick="uploadResource()">Upload Resource</button>
-<p><small>Note: Video file size depends on your Supabase Storage limits.</small></p>
 </div>
 </section>
 
+<!-- QUIZZES -->
 <section id="quizTab" class="card tabSection hidden">
 <h2>Available Quizzes</h2>
 <div id="studentQuizList">Loading quizzes...</div>
@@ -168,19 +205,23 @@ video{width:100%;max-height:420px;background:#111;border-radius:9px}
 <div id="studentQuizResult" class="hidden"></div>
 </section>
 
+<!-- STUDENT RESULTS -->
 <section id="resultTab" class="card tabSection hidden">
 <h2>My Quiz Results</h2>
 <div id="myResults">Loading results...</div>
 </section>
 
+<!-- ADMIN -->
 <section id="adminTab" class="card tabSection hidden">
 <h2>Admin Panel</h2>
 <div class="message">Admin account ka role Supabase profiles table mein admin hona chahiye.</div>
 
 <div class="item">
 <h3>Create New Quiz</h3>
+
 <label>Quiz Title</label>
 <input id="quizTitle" placeholder="Quiz title">
+
 <label>Subject</label>
 <select id="quizSubject">
 <option value="Aqeedah">Aqeedah</option>
@@ -188,10 +229,13 @@ video{width:100%;max-height:420px;background:#111;border-radius:9px}
 <option value="Tafseer">Tafseer</option>
 <option value="Other">Other</option>
 </select>
+
 <label>Available Until (optional)</label>
 <input id="quizUntil" type="datetime-local">
+
 <h3>Questions</h3>
 <div id="questionBuilder"></div>
+
 <button class="light" onclick="addQuestion()">+ Add More Questions</button>
 <button class="gold" onclick="saveQuiz(false)">Save as Draft</button>
 <button class="green" onclick="saveQuiz(true)">Publish Quiz</button>
@@ -207,222 +251,432 @@ video{width:100%;max-height:420px;background:#111;border-radius:9px}
 <h3>Student Attempts / Reports</h3>
 <div id="adminReports">Loading...</div>
 </div>
+
 </section>
 </section>
+
 </main>
 
+<footer>
+DARUL HUDA LIL NISAA
+</footer>
+
 <script>
-const SUPABASE_URL = "https://wcbeidolajiqxrwpjhze.supabase.co";
-const SUPABASE_KEY = "sb_publishable_6XuyNg8XOIEd2UmjLIG7Yw_4ohvWgNC";
-const BUCKET = "Darul_huda_lil_nisa";
+const SUPABASE_URL="https://wcbeidolajiqxrwpjhze.supabase.co";
+const SUPABASE_KEY="sb_publishable_6XuyNg8XOIEd2UmjLIG7Yw_4ohvWgNC";
+const BUCKET="Darul_huda_lil_nisa";
 
-const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let currentUser = null;
-let currentProfile = null;
-let activeQuiz = null;
-let activeQuestions = [];
-let questionCount = 0;
-let passwordRecoveryMode = false;
+let currentUser=null;
+let currentProfile=null;
+let activeQuiz=null;
+let activeQuestions=[];
+let questionCount=0;
+let passwordRecoveryMode=false;
+let submittingQuiz=false;
 
 function el(id){return document.getElementById(id)}
+
 function showMessage(id,msg,type=""){
  const box=el(id);
  if(!box)return;
  box.textContent=msg;
- box.className="message "+(type||"");
+ box.className="message "+type;
  box.classList.remove("hidden");
 }
-function hideMessage(id){if(el(id))el(id).classList.add("hidden")}
+function hideMessage(id){
+ if(el(id))el(id).classList.add("hidden");
+}
+
 function togglePassword(id,button){
  const input=el(id);
  input.type=input.type==="password"?"text":"password";
  button.textContent=input.type==="password"?"👁":"🙈";
 }
+
 function showSection(id){
- ["authSection","registerSection","forgotSection","resetSection"].forEach(x=>el(x).classList.add("hidden"));
+ ["authSection","registerSection","forgotSection","resetSection"]
+ .forEach(x=>el(x).classList.add("hidden"));
  el(id).classList.remove("hidden");
 }
+
 function showTab(id){
- document.querySelectorAll(".tabSection").forEach(x=>x.classList.add("hidden"));
+ document.querySelectorAll(".tabSection")
+ .forEach(x=>x.classList.add("hidden"));
+
  el(id).classList.remove("hidden");
+
  if(id==="courseTab")loadResources();
  if(id==="quizTab")loadStudentQuizzes();
  if(id==="resultTab")loadMyResults();
- if(id==="adminTab"&&isAdmin()){loadAdminQuizzes();loadAdminReports();}
+
+ if(id==="adminTab"&&isAdmin()){
+  loadAdminQuizzes();
+  loadAdminReports();
+ }
 }
-function isAdmin(){return currentProfile&&currentProfile.role==="admin"}
+
+function isAdmin(){
+ return currentProfile&&currentProfile.role==="admin";
+}
+
+function getOptions(q){
+ let opts=q.options;
+ if(typeof opts==="string"){
+  try{opts=JSON.parse(opts)}catch(e){opts=[]}
+ }
+ if(!Array.isArray(opts)){
+  opts=opts&&typeof opts==="object"
+   ?[opts.A,opts.B,opts.C,opts.D].filter(Boolean)
+   :[];
+ }
+ return opts;
+}
+
+function getCorrectText(q){
+ const correct=String(q.correct_answer||"").trim();
+ const opts=getOptions(q);
+ const letters=["A","B","C","D"];
+ const index=letters.indexOf(correct.toUpperCase());
+ if(index>=0)return String(opts[index]||correct);
+ const matched=opts.find(x=>String(x).trim()===correct);
+ return matched?String(matched):correct;
+}
+
+function normalizeAnswer(value){
+ return String(value||"").trim().toUpperCase();
+}
+
+/* LOGIN */
 
 async function login(){
  hideMessage("authMessage");
+
+ const btn=el("loginBtn");
  const email=el("loginEmail").value.trim();
  const password=el("loginPassword").value;
- if(!email||!password)return showMessage("authMessage","Email aur password dono likhein.","error");
- const {data,error}=await db.auth.signInWithPassword({email,password});
- if(error)return showMessage("authMessage",error.message,"error");
- currentUser=data.user;
- await loadDashboard();
+
+ if(!email||!password){
+  return showMessage("authMessage","Email aur password dono likhein.","error");
+ }
+
+ btn.disabled=true;
+ btn.textContent="Logging in...";
+
+ try{
+  const {data,error}=await db.auth.signInWithPassword({email,password});
+  if(error)throw error;
+  currentUser=data.user;
+  await loadDashboard();
+ }catch(e){
+  showMessage("authMessage",e.message,"error");
+ }finally{
+  btn.disabled=false;
+  btn.textContent="Login";
+ }
 }
+
+/* REGISTRATION */
+
 async function registerStudent(){
  hideMessage("registerMessage");
+
+ const btn=el("registerBtn");
  const name=el("regName").value.trim();
  const email=el("regEmail").value.trim();
  const password=el("regPassword").value;
- if(!name||!email||!password)return showMessage("registerMessage","Tamam fields bharein.","error");
- if(password.length<6)return showMessage("registerMessage","Password kam az kam 6 characters ka ho.","error");
- const {data,error}=await db.auth.signUp({
-  email,password,
-  options:{data:{full_name:name},emailRedirectTo:location.origin+location.pathname}
- });
- if(error)return showMessage("registerMessage",error.message,"error");
- if(data.session){
-  currentUser=data.user;
-  await loadDashboard();
- }else{
-  showMessage("registerMessage","Registration request ho gayi. Agar email confirmation enabled hai to apna email confirm karke login karein.","success");
+
+ if(!name||!email||!password){
+  return showMessage("registerMessage","Tamam fields bharein.","error");
+ }
+ if(password.length<6){
+  return showMessage("registerMessage","Password kam az kam 6 characters ka ho.","error");
+ }
+
+ btn.disabled=true;
+ btn.textContent="Please wait...";
+
+ try{
+  const {data,error}=await db.auth.signUp({
+   email,password,
+   options:{
+    data:{full_name:name},
+    emailRedirectTo:location.origin+location.pathname
+   }
+  });
+
+  if(error)throw error;
+
+  if(data.session){
+   currentUser=data.user;
+   await loadDashboard();
+  }else{
+   showMessage(
+    "registerMessage",
+    "Registration request ho gayi. Agar email confirmation enabled hai to email confirm karke login karein.",
+    "success"
+   );
+  }
+ }catch(e){
+  showMessage("registerMessage",e.message,"error");
+ }finally{
+  btn.disabled=false;
+  btn.textContent="Apply / Register";
  }
 }
+
+/* FORGOT PASSWORD */
+
 async function forgotPassword(){
  hideMessage("forgotMessage");
  const email=el("forgotEmail").value.trim();
+
  if(!email)return showMessage("forgotMessage","Email likhein.","error");
+
  const {error}=await db.auth.resetPasswordForEmail(email,{
   redirectTo:location.origin+location.pathname
  });
+
  if(error)return showMessage("forgotMessage",error.message,"error");
- showMessage("forgotMessage","Password reset link aapke registered email par bhej diya gaya hai.","success");
+
+ showMessage("forgotMessage","Password reset link aapke email par bhej diya gaya hai.","success");
 }
+
 function showPasswordReset(){
  passwordRecoveryMode=true;
  showSection("resetSection");
 }
+
 async function updatePassword(){
  hideMessage("resetMessage");
+
  const p=el("newPassword").value;
  const c=el("confirmPassword").value;
+
  if(!p||!c)return showMessage("resetMessage","Dono password fields bharein.","error");
  if(p.length<6)return showMessage("resetMessage","Password kam az kam 6 characters ka ho.","error");
  if(p!==c)return showMessage("resetMessage","Dono passwords match nahi kar rahe.","error");
+
  const {error}=await db.auth.updateUser({password:p});
+
  if(error)return showMessage("resetMessage",error.message,"error");
+
  passwordRecoveryMode=false;
  showMessage("resetMessage","Password update ho gaya. Ab login karein.","success");
  await db.auth.signOut();
  showSection("authSection");
 }
+
+/* LOGOUT */
+
 async function logout(){
  await db.auth.signOut();
- currentUser=null;currentProfile=null;
+ currentUser=null;
+ currentProfile=null;
+ activeQuiz=null;
+ activeQuestions=[];
+
  el("dashboard").classList.add("hidden");
  showSection("authSection");
 }
+
+/* DASHBOARD */
+
 async function loadDashboard(){
  const {data:{user},error}=await db.auth.getUser();
- if(error||!user){showSection("authSection");return}
+
+ if(error||!user){
+  showSection("authSection");
+  return;
+ }
+
  currentUser=user;
+
  const {data:profile,error:profileError}=await db.from("profiles")
-  .select("full_name,role,email").eq("id",user.id).single();
+ .select("full_name,role,email")
+ .eq("id",user.id)
+ .single();
+
  if(profileError){
   showSection("authSection");
   showMessage("authMessage","Profile load nahi hua: "+profileError.message,"error");
   return;
  }
+
  currentProfile=profile;
+
  el("welcomeName").textContent="Welcome, "+(profile.full_name||user.email);
  el("userRole").textContent="Role: "+profile.role;
- el("authSection").classList.add("hidden");
- el("registerSection").classList.add("hidden");
- el("forgotSection").classList.add("hidden");
- el("resetSection").classList.add("hidden");
+
+ ["authSection","registerSection","forgotSection","resetSection"]
+ .forEach(x=>el(x).classList.add("hidden"));
+
  el("dashboard").classList.remove("hidden");
  el("adminNav").classList.toggle("hidden",!isAdmin());
  el("resourceAdminBox").classList.toggle("hidden",!isAdmin());
- el("homeTab").classList.remove("hidden");
- document.querySelectorAll(".tabSection").forEach((x,i)=>{if(i>0)x.classList.add("hidden")});
+
+ showTab("homeTab");
+
  await refreshStats();
  await loadResources();
- if(isAdmin()){loadAdminQuizzes();loadAdminReports();makeQuestionBuilder();}
+
+ if(isAdmin()){
+  loadAdminQuizzes();
+  loadAdminReports();
+  makeQuestionBuilder();
+ }
 }
+
 async function refreshStats(){
  const [r,q]=await Promise.all([
   db.from("course_resources").select("file_path"),
   db.from("quizzes").select("id,is_published")
  ]);
+
  if(!r.error){
   const rows=r.data||[];
   el("statPDF").textContent=rows.filter(x=>(x.file_path||"").toLowerCase().endsWith(".pdf")).length;
   el("statVideo").textContent=rows.filter(x=>/\.(mp4|webm|mov|m4v)$/i.test(x.file_path||"")).length;
  }
+
  if(!q.error){
   el("statQuiz").textContent=q.data.length;
   el("statPublished").textContent=q.data.filter(x=>x.is_published).length;
  }
 }
+
+/* RESOURCE UPLOAD */
+
 async function uploadResource(){
+ if(!isAdmin())return alert("Admin access required.");
+
  const title=el("resourceTitle").value.trim();
  const file=el("resourceFile").files[0];
+
  if(!title||!file)return alert("Title aur file select karein.");
+
  const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
  const path=Date.now()+"_"+safeName;
+
  const {error:upError}=await db.storage.from(BUCKET).upload(path,file,{upsert:false});
  if(upError)return alert("Upload error: "+upError.message);
+
  const {error:insertError}=await db.from("course_resources").insert({
   title:title,
   file_path:path
  });
+
  if(insertError){
   await db.storage.from(BUCKET).remove([path]);
   return alert("Database error: "+insertError.message);
  }
+
  el("resourceTitle").value="";
  el("resourceFile").value="";
+
  alert("Resource upload ho gaya.");
- await loadResources();await refreshStats();
+ await loadResources();
+ await refreshStats();
 }
+
 async function loadResources(){
  const box=el("resourceList");
  box.textContent="Loading...";
- const {data,error}=await db.from("course_resources").select("*").order("created_at",{ascending:false});
- if(error){box.textContent="Resources load error: "+error.message;return}
+
+ const {data,error}=await db.from("course_resources")
+ .select("*").order("created_at",{ascending:false});
+
+ if(error){
+  box.textContent="Resources load error: "+error.message;
+  return;
+ }
+
  box.innerHTML="";
- if(!data.length){box.textContent="Abhi koi PDF ya video upload nahi hai.";return}
+
+ if(!data.length){
+  box.textContent="Abhi koi PDF ya video upload nahi hai.";
+  return;
+ }
+
  for(const item of data){
-  const {data:urlData,error:urlError}=await db.storage.from(BUCKET).createSignedUrl(item.file_path,3600);
-  const div=document.createElement("div");div.className="item";
-  const title=document.createElement("h3");title.textContent=item.title;div.appendChild(title);
+  const {data:urlData,error:urlError}=await db.storage.from(BUCKET)
+  .createSignedUrl(item.file_path,3600);
+
+  const div=document.createElement("div");
+  div.className="item";
+
+  const title=document.createElement("h3");
+  title.textContent=item.title;
+  div.appendChild(title);
+
   if(urlError){
-   const p=document.createElement("p");p.textContent="File access error: "+urlError.message;div.appendChild(p);
+   const p=document.createElement("p");
+   p.textContent="File access error: "+urlError.message;
+   div.appendChild(p);
   }else if(/\.pdf$/i.test(item.file_path)){
-   const a=document.createElement("a");a.href=urlData.signedUrl;a.target="_blank";a.rel="noopener";a.textContent="Open / View PDF";div.appendChild(a);
+   const a=document.createElement("a");
+   a.href=urlData.signedUrl;
+   a.target="_blank";
+   a.rel="noopener";
+   a.textContent="Open / View PDF";
+   div.appendChild(a);
   }else if(/\.(mp4|webm|mov|m4v)$/i.test(item.file_path)){
-   const video=document.createElement("video");video.controls=true;video.src=urlData.signedUrl;div.appendChild(video);
+   const video=document.createElement("video");
+   video.controls=true;
+   video.src=urlData.signedUrl;
+   div.appendChild(video);
   }else{
-   const a=document.createElement("a");a.href=urlData.signedUrl;a.target="_blank";a.textContent="Open File";div.appendChild(a);
+   const a=document.createElement("a");
+   a.href=urlData.signedUrl;
+   a.target="_blank";
+   a.rel="noopener";
+   a.textContent="Open File";
+   div.appendChild(a);
   }
+
   if(isAdmin()){
-   const del=document.createElement("button");del.className="red";del.textContent="Delete";
-   del.onclick=()=>deleteResource(item.id,item.file_path);div.appendChild(del);
+   const del=document.createElement("button");
+   del.className="red";
+   del.textContent="Delete";
+   del.onclick=()=>deleteResource(item.id,item.file_path);
+   div.appendChild(del);
   }
+
   box.appendChild(div);
  }
 }
+
 async function deleteResource(id,path){
+ if(!isAdmin())return;
  if(!confirm("Is resource ko delete karna hai?"))return;
+
  const {error}=await db.from("course_resources").delete().eq("id",id);
  if(error)return alert(error.message);
+
  const {error:storageError}=await db.storage.from(BUCKET).remove([path]);
- if(storageError)alert("Database se delete hua, lekin storage file delete nahi hui: "+storageError.message);
- await loadResources();await refreshStats();
+ if(storageError)alert("Storage file delete nahi hui: "+storageError.message);
+
+ await loadResources();
+ await refreshStats();
 }
+
+/* QUESTION BUILDER */
+
 function makeQuestionBuilder(){
  el("questionBuilder").innerHTML="";
  questionCount=0;
  addQuestion();
 }
+
 function addQuestion(){
  questionCount++;
  const n=questionCount;
- const div=document.createElement("div");div.className="questionBox";div.id="qb_"+n;
+
+ const div=document.createElement("div");
+ div.className="questionBox";
+ div.id="qb_"+n;
+
  div.innerHTML=`
  <h3>Question ${n}</h3>
  <label>Question Text</label>
@@ -434,16 +688,22 @@ function addQuestion(){
  <label>Correct Answer</label>
  <select class="qCorrect">
  <option value="">Select correct answer</option>
- <option value="A">Option A</option><option value="B">Option B</option>
- <option value="C">Option C</option><option value="D">Option D</option>
+ <option value="A">Option A</option>
+ <option value="B">Option B</option>
+ <option value="C">Option C</option>
+ <option value="D">Option D</option>
  </select>
  <button type="button" class="red removeQuestion">Remove Question</button>`;
+
  div.querySelector(".removeQuestion").onclick=()=>div.remove();
+
  el("questionBuilder").appendChild(div);
 }
+
 function readQuestions(){
  const boxes=[...el("questionBuilder").querySelectorAll(".questionBox")];
  const arr=[];
+
  for(const box of boxes){
   const question=box.querySelector(".qText").value.trim();
   const A=box.querySelector(".qA").value.trim();
@@ -451,192 +711,641 @@ function readQuestions(){
   const C=box.querySelector(".qC").value.trim();
   const D=box.querySelector(".qD").value.trim();
   const correct=box.querySelector(".qCorrect").value;
-  if(!question||!A||!B||!C||!D||!correct)throw new Error("Har question ke liye sawal, 4 options aur correct answer zaroori hain.");
-  arr.push({question_text:question,options:[A,B,C,D],correct_answer:correct});
+
+  if(!question||!A||!B||!C||!D||!correct){
+   throw new Error("Har question ke liye sawal, 4 options aur correct answer zaroori hain.");
+  }
+
+  arr.push({
+   question_text:question,
+   options:[A,B,C,D],
+   correct_answer:correct
+  });
  }
+
  if(!arr.length)throw new Error("Kam az kam ek question add karein.");
+
  return arr;
 }
+
+/* CREATE QUIZ */
+
 async function saveQuiz(publish){
+ if(!isAdmin())return alert("Admin access required.");
+
  hideMessage("quizCreateMessage");
+
  try{
   const title=el("quizTitle").value.trim();
   const subject=el("quizSubject").value;
+
   if(!title)throw new Error("Quiz title likhein.");
+
   const questions=readQuestions();
-  let until=el("quizUntil").value;
-  const quizData={title,subject,is_published:publish};
+  const until=el("quizUntil").value;
+
+  const quizData={
+   title,
+   subject,
+   is_published:publish
+  };
+
   if(until)quizData.available_until=new Date(until).toISOString();
-  const {data:quiz,error}=await db.from("quizzes").insert(quizData).select().single();
+
+  const {data:quiz,error}=await db.from("quizzes")
+  .insert(quizData).select().single();
+
   if(error)throw error;
-  const rows=questions.map((q)=>({
+
+  const rows=questions.map(q=>({
    quiz_id:quiz.id,
    question_text:q.question_text,
    options:q.options,
    correct_answer:q.correct_answer
   }));
+
   const {error:qError}=await db.from("quiz_questions").insert(rows);
+
   if(qError){
    await db.from("quizzes").delete().eq("id",quiz.id);
    throw qError;
   }
-  showMessage("quizCreateMessage",publish?"Quiz publish ho gaya.":"Quiz draft save ho gaya.","success");
-  el("quizTitle").value="";el("quizUntil").value="";
+
+  showMessage(
+   "quizCreateMessage",
+   publish?"Quiz publish ho gaya.":"Quiz draft save ho gaya.",
+   "success"
+  );
+
+  el("quizTitle").value="";
+  el("quizUntil").value="";
+
   makeQuestionBuilder();
-  await loadAdminQuizzes();await refreshStats();
- }catch(e){showMessage("quizCreateMessage",e.message||String(e),"error")}
+
+  await loadAdminQuizzes();
+  await loadStudentQuizzes();
+  await refreshStats();
+
+ }catch(e){
+  showMessage("quizCreateMessage",e.message||String(e),"error");
+ }
 }
+
+/* STUDENT AVAILABLE QUIZZES */
+
 async function loadStudentQuizzes(){
- const box=el("studentQuizList");box.textContent="Loading...";
- el("takeQuizBox").classList.add("hidden");el("studentQuizResult").classList.add("hidden");
- const {data,error}=await db.from("quizzes").select("*").eq("is_published",true).order("created_at",{ascending:false});
- if(error){box.textContent="Quiz load error: "+error.message;return}
+ const box=el("studentQuizList");
+ box.textContent="Loading quizzes...";
+
+ el("takeQuizBox").classList.add("hidden");
+ el("studentQuizResult").classList.add("hidden");
+
+ const {data,error}=await db.from("quizzes")
+ .select("*")
+ .eq("is_published",true)
+ .order("created_at",{ascending:false});
+
+ if(error){
+  box.textContent="Quiz load error: "+error.message;
+  return;
+ }
+
  box.innerHTML="";
- const now=new Date();
- const valid=(data||[]).filter(q=>!q.available_until||new Date(q.available_until)>now);
- if(!valid.length){box.textContent="Abhi koi published quiz available nahi hai.";return}
+
+ const valid=(data||[]);
+
+ if(!valid.length){
+  box.textContent="Abhi koi published quiz available nahi hai.";
+  return;
+ }
+
  valid.forEach(q=>{
-  const div=document.createElement("div");div.className="item";
-  const h=document.createElement("h3");h.textContent=q.title;div.appendChild(h);
-  const p=document.createElement("p");p.textContent="Subject: "+q.subject;div.appendChild(p);
-  const b=document.createElement("button");b.className="gold";b.textContent="Start Quiz";b.onclick=()=>startQuiz(q);div.appendChild(b);
+  const div=document.createElement("div");
+  div.className="item";
+
+  const h=document.createElement("h3");
+  h.textContent=q.title;
+  div.appendChild(h);
+
+  const p=document.createElement("p");
+  p.textContent="Subject: "+q.subject;
+  div.appendChild(p);
+
+  const badge=document.createElement("span");
+  badge.className="badge";
+  badge.textContent="Published";
+  div.appendChild(badge);
+
+  const b=document.createElement("button");
+  b.className="gold";
+  b.textContent="Start Quiz";
+  b.onclick=()=>startQuiz(q);
+  div.appendChild(b);
+
   box.appendChild(div);
  });
 }
+
+/* START QUIZ */
+
 async function startQuiz(quiz){
- const {data,error}=await db.from("quiz_questions").select("*").eq("quiz_id",quiz.id);
+ const {data,error}=await db.from("quiz_questions")
+ .select("*").eq("quiz_id",quiz.id);
+
  if(error)return alert("Questions load error: "+error.message);
  if(!data||!data.length)return alert("Is quiz mein questions nahi hain.");
- activeQuiz=quiz;activeQuestions=data;
- const box=el("takeQuizBox");box.innerHTML="";
- const h=document.createElement("h3");h.textContent=quiz.title;box.appendChild(h);
+
+ activeQuiz=quiz;
+ activeQuestions=data;
+
+ const box=el("takeQuizBox");
+ box.innerHTML="";
+
+ const h=document.createElement("h3");
+ h.textContent=quiz.title;
+ box.appendChild(h);
+
+ const info=document.createElement("p");
+ info.textContent="Total Questions: "+data.length;
+ box.appendChild(info);
+
  data.forEach((q,i)=>{
-  const div=document.createElement("div");div.className="questionBox";
-  const question=document.createElement("p");question.textContent=(i+1)+". "+q.question_text;div.appendChild(question);
-  let opts=q.options;
-  if(typeof opts==="string"){try{opts=JSON.parse(opts)}catch(e){opts=[]}}
-  if(!Array.isArray(opts))opts=[opts.A,opts.B,opts.C,opts.D].filter(Boolean);
+  const div=document.createElement("div");
+  div.className="questionBox";
+
+  const question=document.createElement("p");
+  question.textContent=(i+1)+". "+q.question_text;
+  div.appendChild(question);
+
+  const opts=getOptions(q);
+  const letters=["A","B","C","D"];
+
   opts.forEach((op,j)=>{
-   const letter=["A","B","C","D"][j];
-   const label=document.createElement("label");label.className="option";
-   const input=document.createElement("input");input.type="radio";input.name="answer_"+q.id;input.value=letter;
-   const span=document.createElement("span");span.textContent=letter+". "+op;
-   label.append(input,span);div.appendChild(label);
+   const label=document.createElement("label");
+   label.className="option";
+
+   const input=document.createElement("input");
+   input.type="radio";
+   input.name="answer_"+q.id;
+   input.value=letters[j]||String(j+1);
+
+   const span=document.createElement("span");
+   span.textContent=(letters[j]||"")+" . "+op;
+
+   label.append(input,span);
+   div.appendChild(label);
   });
+
   box.appendChild(div);
  });
- const submit=document.createElement("button");submit.className="green";submit.textContent="Submit Quiz";submit.onclick=submitQuiz;box.appendChild(submit);
+
+ const submit=document.createElement("button");
+ submit.className="green";
+ submit.textContent="Submit Quiz";
+ submit.onclick=submitQuiz;
+ box.appendChild(submit);
+
  box.classList.remove("hidden");
  el("studentQuizResult").classList.add("hidden");
+
+ box.scrollIntoView({behavior:"smooth",block:"start"});
 }
+
+/* SUBMIT QUIZ AND SAVE EVERY ATTEMPT */
+
 async function submitQuiz(){
- if(!activeQuiz)return;
- const answers=[];let score=0;
+ if(!activeQuiz||submittingQuiz)return;
+
+ const answers=[];
+ let score=0;
+
  activeQuestions.forEach(q=>{
-  const chosen=document.querySelector('input[name="answer_'+q.id+'"]:checked');
+  const chosen=document.querySelector(
+   'input[name="answer_'+q.id+'"]:checked'
+  );
+
   const selected=chosen?chosen.value:"";
   const correct=String(q.correct_answer||"").trim().toUpperCase();
+  const opts=getOptions(q);
+  const letters=["A","B","C","D"];
+
+  const selectedIndex=letters.indexOf(selected);
+  const correctIndex=letters.indexOf(correct);
+
+  const selectedText=selectedIndex>=0
+   ?String(opts[selectedIndex]||"")
+   :"Not answered";
+
+  const correctText=correctIndex>=0
+   ?String(opts[correctIndex]||"")
+   :getCorrectText(q);
+
   const ok=selected===correct;
+
   if(ok)score++;
-  let opts=q.options;
-  if(typeof opts==="string"){try{opts=JSON.parse(opts)}catch(e){opts=[]}}
-  if(!Array.isArray(opts))opts=[opts.A,opts.B,opts.C,opts.D].filter(Boolean);
-  answers.push({question:q.question_text,selected,correct,options:opts,isCorrect:ok});
+
+  answers.push({
+   question_id:q.id,
+   question:q.question_text,
+   selected:selected,
+   selected_text:selectedText,
+   correct:correct,
+   correct_text:correctText,
+   options:opts,
+   isCorrect:ok
+  });
  });
- const {error}=await db.from("quiz_attempts").insert({
-  quiz_id:activeQuiz.id,
-  student_id:currentUser.id,
-  score:score
- });
- if(error)return alert("Result save error: "+error.message);
- const result=el("studentQuizResult");result.innerHTML="";
- const heading=document.createElement("h3");heading.textContent="Your Result: "+score+" / "+activeQuestions.length;result.appendChild(heading);
+
+ const btn=el("takeQuizBox").querySelector("button:last-child");
+ submittingQuiz=true;
+
+ if(btn){
+  btn.disabled=true;
+  btn.textContent="Saving Result...";
+ }
+
+ try{
+  const {error}=await db.from("quiz_attempts").insert({
+   quiz_id:activeQuiz.id,
+   student_id:currentUser.id,
+   score:score,
+   answers:answers
+  });
+
+  if(error)throw error;
+
+  showQuizResult(score,answers);
+
+  el("takeQuizBox").classList.add("hidden");
+
+  await loadMyResults();
+
+ }catch(e){
+  alert("Result save error: "+e.message);
+  if(btn){
+   btn.disabled=false;
+   btn.textContent="Submit Quiz";
+  }
+ }finally{
+  submittingQuiz=false;
+ }
+}
+
+/* SHOW IMMEDIATE RESULT */
+
+function showQuizResult(score,answers){
+ const result=el("studentQuizResult");
+ result.innerHTML="";
+
+ const heading=document.createElement("h3");
+ heading.textContent="Your Result: "+score+" / "+activeQuestions.length;
+ result.appendChild(heading);
+
+ const percentage=Math.round((score/activeQuestions.length)*100);
+
+ const percent=document.createElement("p");
+ percent.textContent="Percentage: "+percentage+"%";
+ result.appendChild(percent);
+
+ const thanks=document.createElement("p");
+ thanks.textContent="Quiz complete. Jazakillahu Khairan!";
+ result.appendChild(thanks);
+
  answers.forEach((a,i)=>{
-  const div=document.createElement("div");div.className="questionBox";
-  const q=document.createElement("p");q.textContent=(i+1)+". "+a.question;div.appendChild(q);
-  const yours=document.createElement("p");yours.textContent="Your answer: "+(a.selected||"Not answered");div.appendChild(yours);
-  const correct=document.createElement("p");correct.textContent="Correct answer: "+a.correct;div.appendChild(correct);
-  const status=document.createElement("p");status.textContent=a.isCorrect?"Correct":"Wrong";status.className=a.isCorrect?"resultCorrect":"resultWrong";div.appendChild(status);
+  const div=document.createElement("div");
+  div.className="questionBox";
+
+  const q=document.createElement("p");
+  q.textContent=(i+1)+". "+a.question;
+  div.appendChild(q);
+
+  const yours=document.createElement("p");
+  yours.className="resultYour";
+  yours.textContent="Your answer: "+(a.selected_text||"Not answered");
+  div.appendChild(yours);
+
+  const correct=document.createElement("p");
+  correct.className="resultAnswer";
+  correct.textContent="Correct answer: "+a.correct_text;
+  div.appendChild(correct);
+
+  const status=document.createElement("p");
+  status.textContent=a.isCorrect?"Correct ✓":"Wrong ✗";
+  status.className=a.isCorrect?"resultCorrect":"resultWrong";
+  div.appendChild(status);
+
   result.appendChild(div);
  });
+
+ const again=document.createElement("button");
+ again.className="gold";
+ again.textContent="Attempt Again";
+ again.onclick=()=>startQuiz(activeQuiz);
+ result.appendChild(again);
+
+ const back=document.createElement("button");
+ back.className="light";
+ back.textContent="Available Quizzes";
+ back.onclick=()=>{
+  result.classList.add("hidden");
+  loadStudentQuizzes();
+ };
+ result.appendChild(back);
+
  result.classList.remove("hidden");
- el("takeQuizBox").classList.add("hidden");
- await loadMyResults();
+ result.scrollIntoView({behavior:"smooth",block:"start"});
 }
+
+/* STUDENT RESULTS */
+
 async function loadMyResults(){
- const box=el("myResults");box.textContent="Loading...";
- const {data,error}=await db.from("quiz_attempts").select("id,quiz_id,score,completed_at").eq("student_id",currentUser.id).order("completed_at",{ascending:false});
- if(error){box.textContent="Result load error: "+error.message;return}
+ if(!currentUser)return;
+
+ const box=el("myResults");
+ box.textContent="Loading...";
+
+ const {data,error}=await db.from("quiz_attempts")
+ .select("id,quiz_id,score,completed_at,answers")
+ .eq("student_id",currentUser.id)
+ .order("completed_at",{ascending:false});
+
+ if(error){
+  box.textContent="Result load error: "+error.message;
+  return;
+ }
+
  box.innerHTML="";
- if(!data.length){box.textContent="Abhi koi result nahi hai.";return}
+
+ if(!data.length){
+  box.textContent="Abhi koi result nahi hai.";
+  return;
+ }
+
  for(const a of data){
-  const {data:q}=await db.from("quizzes").select("title,subject").eq("id",a.quiz_id).maybeSingle();
-  const div=document.createElement("div");div.className="item";
-  const h=document.createElement("h3");h.textContent=q?q.title:"Quiz";div.appendChild(h);
-  const p=document.createElement("p");p.textContent="Subject: "+(q?q.subject:"")+" | Marks: "+a.score;div.appendChild(p);
-  if(a.completed_at){const d=document.createElement("small");d.textContent=new Date(a.completed_at).toLocaleString();div.appendChild(d)}
+  const {data:q}=await db.from("quizzes")
+  .select("title,subject")
+  .eq("id",a.quiz_id)
+  .maybeSingle();
+
+  const div=document.createElement("div");
+  div.className="item";
+
+  const h=document.createElement("h3");
+  h.textContent=q?q.title:"Quiz";
+  div.appendChild(h);
+
+  const p=document.createElement("p");
+  p.textContent="Subject: "+(q?q.subject:"")+" | Marks: "+a.score;
+  div.appendChild(p);
+
+  if(a.completed_at){
+   const d=document.createElement("small");
+   d.textContent=new Date(a.completed_at).toLocaleString();
+   div.appendChild(d);
+  }
+
+  const answers=a.answers||[];
+
+  if(answers.length){
+   const details=document.createElement("details");
+   const summary=document.createElement("summary");
+   summary.textContent="View Questions & Answers";
+   details.appendChild(summary);
+
+   answers.forEach((ans,i)=>{
+    const row=document.createElement("div");
+    row.className="questionBox";
+
+    const question=document.createElement("p");
+    question.textContent=(i+1)+". "+ans.question;
+    row.appendChild(question);
+
+    const your=document.createElement("p");
+    your.textContent="Your answer: "+(ans.selected_text||"Not answered");
+    row.appendChild(your);
+
+    const right=document.createElement("p");
+    right.textContent="Correct answer: "+(ans.correct_text||"");
+    row.appendChild(right);
+
+    const status=document.createElement("p");
+    status.textContent=ans.isCorrect?"Correct":"Wrong";
+    status.className=ans.isCorrect?"resultCorrect":"resultWrong";
+    row.appendChild(status);
+
+    details.appendChild(row);
+   });
+
+   div.appendChild(details);
+  }
+
   box.appendChild(div);
  }
 }
+
+/* ADMIN QUIZ LIST */
+
 async function loadAdminQuizzes(){
- const box=el("adminQuizList");box.textContent="Loading...";
- const {data,error}=await db.from("quizzes").select("*").order("created_at",{ascending:false});
- if(error){box.textContent=error.message;return}
+ if(!isAdmin())return;
+
+ const box=el("adminQuizList");
+ box.textContent="Loading...";
+
+ const {data,error}=await db.from("quizzes")
+ .select("*").order("created_at",{ascending:false});
+
+ if(error){
+  box.textContent=error.message;
+  return;
+ }
+
  box.innerHTML="";
- if(!data.length){box.textContent="No quizzes yet.";return}
+
+ if(!data.length){
+  box.textContent="No quizzes yet.";
+  return;
+ }
+
  data.forEach(q=>{
-  const div=document.createElement("div");div.className="item";
-  const h=document.createElement("h3");h.textContent=q.title;div.appendChild(h);
-  const p=document.createElement("p");p.textContent=q.subject+" | "+(q.is_published?"Published":"Draft");div.appendChild(p);
-  const toggle=document.createElement("button");toggle.className="gold";toggle.textContent=q.is_published?"Unpublish":"Publish";
-  toggle.onclick=()=>togglePublish(q.id,!q.is_published);div.appendChild(toggle);
-  const del=document.createElement("button");del.className="red";del.textContent="Delete Quiz";del.onclick=()=>deleteQuiz(q.id);div.appendChild(del);
+  const div=document.createElement("div");
+  div.className="item";
+
+  const h=document.createElement("h3");
+  h.textContent=q.title;
+  div.appendChild(h);
+
+  const p=document.createElement("p");
+  p.textContent=q.subject+" | "+(q.is_published?"Published":"Draft");
+  div.appendChild(p);
+
+  const toggle=document.createElement("button");
+  toggle.className="gold";
+  toggle.textContent=q.is_published?"Unpublish":"Publish";
+  toggle.onclick=()=>togglePublish(q.id,!q.is_published);
+  div.appendChild(toggle);
+
+  const del=document.createElement("button");
+  del.className="red";
+  del.textContent="Delete Quiz";
+  del.onclick=()=>deleteQuiz(q.id);
+  div.appendChild(del);
+
   box.appendChild(div);
  });
 }
+
 async function togglePublish(id,value){
- const {error}=await db.from("quizzes").update({is_published:value}).eq("id",id);
+ if(!isAdmin())return;
+
+ const {error}=await db.from("quizzes")
+ .update({is_published:value}).eq("id",id);
+
  if(error)return alert(error.message);
- loadAdminQuizzes();loadStudentQuizzes();refreshStats();
+
+ await loadAdminQuizzes();
+ await loadStudentQuizzes();
+ await refreshStats();
 }
+
 async function deleteQuiz(id){
+ if(!isAdmin())return;
+
  if(!confirm("Quiz aur uske questions delete karne hain?"))return;
+
  const {error}=await db.from("quizzes").delete().eq("id",id);
+
  if(error)return alert(error.message);
- loadAdminQuizzes();loadStudentQuizzes();refreshStats();
+
+ await loadAdminQuizzes();
+ await loadStudentQuizzes();
+ await loadAdminReports();
+ await refreshStats();
 }
+
+/* ADMIN STUDENT REPORTS */
+
 async function loadAdminReports(){
- const box=el("adminReports");box.textContent="Loading...";
- const {data,error}=await db.from("quiz_attempts").select("id,student_id,quiz_id,score,completed_at").order("completed_at",{ascending:false});
- if(error){box.textContent=error.message;return}
+ if(!isAdmin())return;
+
+ const box=el("adminReports");
+ box.textContent="Loading...";
+
+ const {data,error}=await db.from("quiz_attempts")
+ .select("id,student_id,quiz_id,score,completed_at,answers")
+ .order("completed_at",{ascending:false});
+
+ if(error){
+  box.textContent="Report load error: "+error.message;
+  return;
+ }
+
  box.innerHTML="";
- if(!data.length){box.textContent="Abhi koi student submission nahi hai.";return}
+
+ if(!data.length){
+  box.textContent="Abhi koi student submission nahi hai.";
+  return;
+ }
+
  for(const a of data){
   const [profile,quiz]=await Promise.all([
-   db.from("profiles").select("full_name,email").eq("id",a.student_id).maybeSingle(),
-   db.from("quizzes").select("title,subject").eq("id",a.quiz_id).maybeSingle()
+   db.from("profiles").select("full_name,email")
+   .eq("id",a.student_id).maybeSingle(),
+
+   db.from("quizzes").select("title,subject")
+   .eq("id",a.quiz_id).maybeSingle()
   ]);
-  const div=document.createElement("div");div.className="item";
-  const h=document.createElement("h3");h.textContent=profile.data?.full_name||"Student";div.appendChild(h);
-  const p=document.createElement("p");p.textContent="Email: "+(profile.data?.email||"")+" | Quiz: "+(quiz.data?.title||"")+" | Marks: "+a.score;div.appendChild(p);
-  if(a.completed_at){const d=document.createElement("small");d.textContent=new Date(a.completed_at).toLocaleString();div.appendChild(d)}
+
+  const div=document.createElement("div");
+  div.className="item";
+
+  const h=document.createElement("h3");
+  h.textContent=profile.data?.full_name||"Student";
+  div.appendChild(h);
+
+  const p=document.createElement("p");
+  p.textContent=
+   "Email: "+(profile.data?.email||"")+
+   " | Quiz: "+(quiz.data?.title||"")+
+   " | Subject: "+(quiz.data?.subject||"")+
+   " | Marks: "+a.score;
+  div.appendChild(p);
+
+  if(a.completed_at){
+   const d=document.createElement("small");
+   d.textContent="Attempt date: "+new Date(a.completed_at).toLocaleString();
+   div.appendChild(d);
+  }
+
+  const answers=a.answers||[];
+
+  if(answers.length){
+   const details=document.createElement("details");
+   const summary=document.createElement("summary");
+   summary.textContent="View Student Answers";
+   details.appendChild(summary);
+
+   answers.forEach((ans,i)=>{
+    const row=document.createElement("div");
+    row.className="questionBox";
+
+    const question=document.createElement("p");
+    question.textContent=(i+1)+". "+ans.question;
+    row.appendChild(question);
+
+    const your=document.createElement("p");
+    your.textContent="Student answer: "+(ans.selected_text||"Not answered");
+    row.appendChild(your);
+
+    const right=document.createElement("p");
+    right.textContent="Correct answer: "+(ans.correct_text||"");
+    row.appendChild(right);
+
+    const status=document.createElement("p");
+    status.textContent=ans.isCorrect?"Correct":"Wrong";
+    status.className=ans.isCorrect?"resultCorrect":"resultWrong";
+    row.appendChild(status);
+
+    details.appendChild(row);
+   });
+
+   div.appendChild(details);
+  }
+
   box.appendChild(div);
  }
 }
+
+/* AUTH SESSION */
+
 db.auth.onAuthStateChange((event,session)=>{
- if(event==="PASSWORD_RECOVERY"){passwordRecoveryMode=true;showPasswordReset();return}
- if(event==="SIGNED_IN"&&session&&!passwordRecoveryMode)setTimeout(()=>loadDashboard(),0);
- if(event==="SIGNED_OUT"){currentUser=null;currentProfile=null}
+ if(event==="PASSWORD_RECOVERY"){
+  passwordRecoveryMode=true;
+  showPasswordReset();
+  return;
+ }
+
+ if(event==="SIGNED_OUT"){
+  currentUser=null;
+  currentProfile=null;
+ }
 });
+
 (async()=>{
  const {data}=await db.auth.getSession();
+
  const params=new URLSearchParams(location.hash.substring(1));
- if(data.session&&params.get("type")==="recovery"){showPasswordReset();return}
- if(data.session&&!passwordRecoveryMode)await loadDashboard();
+
+ if(data.session&&params.get("type")==="recovery"){
+  showPasswordReset();
+  return;
+ }
+
+ if(data.session&&!passwordRecoveryMode){
+  await loadDashboard();
+ }else{
+  showSection("authSection");
+ }
 })();
 </script>
 </body>
 </html>
-
-
-
