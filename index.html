@@ -993,69 +993,64 @@ async function submitQuiz(){
 
 /* SHOW IMMEDIATE RESULT */
 
+
+
 function showQuizResult(score,answers){
- const result=el("studentQuizResult");
- result.innerHTML="";
+const result=el("studentQuizResult");
+result.innerHTML="";
 
- const heading=document.createElement("h3");
- heading.textContent="Your Result: "+score+" / "+activeQuestions.length;
- result.appendChild(heading);
+const heading=document.createElement("h3");
+heading.textContent="Your Result: "+score+" / "+activeQuestions.length;
+result.appendChild(heading);
 
- const percentage=Math.round((score/activeQuestions.length)*100);
+const percentage=Math.round((score/activeQuestions.length)*100);
 
- const percent=document.createElement("p");
- percent.textContent="Percentage: "+percentage+"%";
- result.appendChild(percent);
+const percent=document.createElement("p");
+percent.textContent="Percentage: "+percentage+"%";
+result.appendChild(percent);
 
- const thanks=document.createElement("p");
- thanks.textContent="Quiz complete. Jazakillahu Khairan!";
- result.appendChild(thanks);
+const thanks=document.createElement("p");
+thanks.textContent="Quiz complete. Jazakillahu Khairan!";
+result.appendChild(thanks);
 
- answers.forEach((a,i)=>{
-  const div=document.createElement("div");
-  div.className="questionBox";
+answers.forEach((a,i)=>{
+const div=document.createElement("div");
+div.className="questionBox";
 
-  const q=document.createElement("p");
-  q.textContent=(i+1)+". "+a.question;
-  div.appendChild(q);
+const q=document.createElement("p");
+q.textContent=(i+1)+". "+a.question;
+div.appendChild(q);
 
-  const yours=document.createElement("p");
-  yours.className="resultYour";
-  yours.textContent="Your answer: "+(a.selected_text||"Not answered");
-  div.appendChild(yours);
+const yours=document.createElement("p");
+yours.className="resultYour";
+yours.textContent="Your answer: "+(a.selected_text||"Not answered");
+div.appendChild(yours);
 
-  const correct=document.createElement("p");
-  correct.className="resultAnswer";
-  correct.textContent="Correct answer: "+a.correct_text;
-  div.appendChild(correct);
+const correct=document.createElement("p");
+correct.className="resultAnswer";
+correct.textContent="Correct answer: "+a.correct_text;
+div.appendChild(correct);
 
-  const status=document.createElement("p");
-  status.textContent=a.isCorrect?"Correct ✓":"Wrong ✗";
-  status.className=a.isCorrect?"resultCorrect":"resultWrong";
-  div.appendChild(status);
+const status=document.createElement("p");
+status.textContent=a.isCorrect?"Correct ✓":"Wrong ✗";
+status.className=a.isCorrect?"resultCorrect":"resultWrong";
+div.appendChild(status);
 
-  result.appendChild(div);
- });
+result.appendChild(div);
+});
 
- const back=document.createElement("button");
+const back=document.createElement("button");
 back.className="light";
 back.textContent="Available Quizzes";
 back.onclick=()=>{
- result.classList.add("hidden");
- loadStudentQuizzes();
+result.classList.add("hidden");
+loadStudentQuizzes();
+};
+result.appendChild(back);
 
- const back=document.createElement("button");
- back.className="light";
- back.textContent="Available Quizzes";
- back.onclick=()=>{
-  result.classList.add("hidden");
-  loadStudentQuizzes();
- };
- result.appendChild(back);
-
- result.classList.remove("hidden");
- result.scrollIntoView({behavior:"smooth",block:"start"});
-}
+result.classList.remove("hidden");
+result.scrollIntoView({behavior:"smooth",block:"start"});
+                }
 
 /* STUDENT RESULTS */
 
