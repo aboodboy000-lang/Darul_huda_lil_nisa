@@ -1037,11 +1037,12 @@ function showQuizResult(score,answers){
   result.appendChild(div);
  });
 
- const again=document.createElement("button");
- again.className="gold";
- again.textContent="Attempt Again";
- again.onclick=()=>startQuiz(activeQuiz);
- result.appendChild(again);
+ const back=document.createElement("button");
+back.className="light";
+back.textContent="Available Quizzes";
+back.onclick=()=>{
+ result.classList.add("hidden");
+ loadStudentQuizzes();
 
  const back=document.createElement("button");
  back.className="light";
